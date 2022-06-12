@@ -12,6 +12,9 @@
     margin-top: 16px;
     cursor: pointer;
     transition: opacity 0.3s linear;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .profile__edit-button:hover {
