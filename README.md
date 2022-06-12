@@ -1,17 +1,28 @@
-# Проект: Место
+# Проект: Mesto
 
-### Обзор
+## Описание проекта
 
-* Figma
-* Картинки
+Первая проектная работа по курсу [Веб-разработчик плюс](https://practicum.yandex.ru/profile/web-plus/) в [Яндекс.Практикуме](https://practicum.yandex.ru/).
 
-**Figma**
+В завершенном виде это будет интерактивная страница, куда можно добавлять фотографии, удалять их и ставить лайки. Создан по методологии БЭМ с файловой структурой Nested BEM.
 
-* [Ссылка на макет в Figma](https://www.figma.com/file/2cn9N9jSkmxD84oJik7xL7/JavaScript.-Sprint-4?node-id=0%3A1)
+### Функциональность
 
-**Картинки**
+* Адаптивная верстка
+* `Grid Layout`
+* Медиазапросы
+* Формы
 
-Доставать картинки предстоит из Фигмы. Это расхожая практика, поэтому полезно потренироваться.
-Не забудьте [оптимизировать картинки](https://tinypng.com/), чтобы ваш сайт загружался быстрее.
+### Технологии
 
-Удачи!
+* `Flexbox`
+* `Grid Layout`
+* `Git`
+
+### Брифы и макет
+
+* [Макет](https://www.figma.com/file/2cn9N9jSkmxD84oJik7xL7/JavaScript.-Sprint-4?node-id=28212%3A326)
+
+### Демо
+
+[Демо на GitHub Pages](https://elena-delikanova.github.io/mesto-project/index.html)
