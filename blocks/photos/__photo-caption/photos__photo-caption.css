@@ -8,4 +8,7 @@
     /* Размеры не такие, как в макете. Но в макете при высоте строки в 29px, высоте картинки в 282px и высоте всего блока в 361px на отсупы остается 50px. Это меньше, чем 25px и 31px в макете*/
     padding: 19px 0 31px 21px;
     width: 80%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
