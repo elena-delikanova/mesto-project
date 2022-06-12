@@ -1,0 +1,10 @@
+.profile__avatar-and-info-container {
+  display: flex;
+  align-items: center;
+}
+
+@media screen and (max-width: 767px) {
+  .profile__avatar-and-info-container {
+    flex-direction: column;
+  }
+}

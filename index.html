@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mesto</title>
+  <link rel="stylesheet" href="pages/index.css">
+</head>
+
+<body class="page">
+  <header class="header">
+    <img src="./images/header-logo.svg" alt="Логотип проекта Mesto Russia" class="header__logo">
+  </header>
+  <main class="content">
+    <section class="profile">
+      <div class="profile__avatar-and-info-container">
+        <img src="./images/avatar.jpg" alt="Аватар текущего пользователя" class="profile__avatar">
+        <div class="profile__info-container">
+          <div class="profile__info">
+            <h1 class="profile__name">Жак-Ив Кусто</h1>
+            <p class="profile__caption">Исследователь океана</p>
+          </div>
+          <button class="profile__edit-button" aria-label="Редактировать профиль"></button>
+        </div>
+      </div>
+      <button class="profile__add-button" aria-label="Добавить фото"></button>
+    </section>
+    <section class="photos">
+      <ul class="photos__gallary">
+        <li class="photos__photo-card">
+          <figure class="photos__photo-item">
+            <img src="./images/karachaevsk.jpg" alt="" class="photos__photo">
+            <figcaption class="photos__photo-caption">Карачаевск</figcaption>
+          </figure>
+          <button class="photos__like-button" aria-label="Нравится"></button>
+        </li>
+        <li class="photos__photo-card">
+          <figure class="photos__photo-item">
+            <img src="./images/elbrus.jpg" alt="" class="photos__photo">
+            <figcaption class="photos__photo-caption">Гора Эльбрус</figcaption>
+          </figure>
+          <button class="photos__like-button" aria-label="Нравится"></button>
+        </li>
+        <li class="photos__photo-card">
+          <figure class="photos__photo-item">
+            <img src="./images/dombai.jpg" alt="" class="photos__photo">
+            <figcaption class="photos__photo-caption">Домбай</figcaption>
+          </figure>
+          <button class="photos__like-button" aria-label="Нравится"></button>
+        </li>
+        <li class="photos__photo-card">
+          <figure class="photos__photo-item">
+            <img src="./images/balkaria_tower.jpg"
+              alt="Фотография древней сторожевой башни Абаевых в с. Верхняя Балкария" class="photos__photo">
+            <figcaption class="photos__photo-caption">Башня Абаевых</figcaption>
+          </figure>
+          <button class="photos__like-button" aria-label="Нравится"></button>
+        </li>
+        <li class="photos__photo-card">
+          <figure class="photos__photo-item">
+            <img src="./images/balkaria_mountains.jpg"
+              alt="Фотография заснеженных горных вершин рядом с с. Верхняя Балкария" class="photos__photo">
+            <figcaption class="photos__photo-caption">Верхняя Балкария</figcaption>
+          </figure>
+          <button class="photos__like-button" aria-label="Нравится"></button>
+        </li>
+        <li class="photos__photo-card">
+          <figure class="photos__photo-item">
+            <img src="./images/cherek.jpg" alt="Фотография горной реки Черек" class="photos__photo">
+            <figcaption class="photos__photo-caption">Река Черек</figcaption>
+          </figure>
+          <button class="photos__like-button" aria-label="Нравится"></button>
+        </li>
+      </ul>
+    </section>
+  </main>
+  <footer class="footer">
+    <p class="footer__copyright">&copy; 2020 Mesto Russia</p>
+  </footer>
+  <section class="popup popup_opened">
+    <div class="popup__container">
+      <form class="edit-form">
+        <h2 class="edit-form__header">Редактировать профиль</h2>
+        <input type="text" class="edit-form__input" id="profile-name" aria-label="Имя" placeholder="Имя" name="name"
+          required>
+        <input type="text" class="edit-form__input" id="profile-caption" aria-label="Подпись" placeholder="Подпись"
+          name="caption" required>
+        <button class="edit-form__save-button">Сохранить</button>
+      </form>
+      <button class="popup__close-button" aria-label="Закрыть форму"></button>
+    </div>
+  </section>
+</body>
+
+</html>
