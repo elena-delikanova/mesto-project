@@ -11,10 +11,14 @@
     margin: 48px auto 0;
     padding: 0;
     cursor: pointer;
+    transition: opacity 0.3s linear;
 }
 
 .edit-form__save-button:hover {
-  transition: opacity 0.3s linear;
+  opacity: 0.8;
+}
+
+.edit-form__save-button:focus {
   opacity: 0.8;
 }
 

@@ -10,10 +10,14 @@
   border: none;
   background-color: black;
   cursor: pointer;
+  transition: opacity 0.3s linear;
 }
 
 .popup__close-button:hover {
-  transition: opacity 0.3s linear;
+  opacity: 0.6;
+}
+
+.popup__close-button:focus {
   opacity: 0.6;
 }
 

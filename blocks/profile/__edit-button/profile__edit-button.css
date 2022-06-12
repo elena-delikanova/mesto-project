@@ -10,10 +10,14 @@
     /* В макете видно, что отступ сверху есть, но нет значений. Прикидывала на глаз, ориентируясь на текст имени*/
     margin-top: 16px;
     cursor: pointer;
+    transition: opacity 0.3s linear;
 }
 
 .profile__edit-button:hover {
-  transition: opacity 0.3s linear;
+  opacity: 0.5;
+}
+
+.profile__edit-button:focus {
   opacity: 0.5;
 }
 
