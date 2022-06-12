@@ -9,6 +9,12 @@
     background-repeat: no-repeat;
     /* В макете видно, что отступ сверху есть, но нет значений. Прикидывала на глаз, ориентируясь на текст имени*/
     margin-top: 16px;
+    cursor: pointer;
+}
+
+.profile__edit-button:hover {
+  transition: opacity 0.3s linear;
+  opacity: 0.5;
 }
 
 @media screen and (max-width: 767px) {

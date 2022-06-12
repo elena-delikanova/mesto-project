@@ -10,4 +10,10 @@
     left: 250px;
     border: none;
     background-color: white;
+    cursor: pointer;
+}
+
+.photos__like-button:hover {
+  transition: opacity 0.3s linear;
+  opacity: 0.5;
 }

@@ -9,6 +9,12 @@
   background-position: center;
   border: none;
   background-color: black;
+  cursor: pointer;
+}
+
+.popup__close-button:hover {
+  transition: opacity 0.3s linear;
+  opacity: 0.6;
 }
 
 @media screen and (max-width: 767px) {
