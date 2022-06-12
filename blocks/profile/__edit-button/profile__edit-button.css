@@ -7,6 +7,7 @@
     background-image: url(../../../images/edit-button.svg);
     background-position: center;
     background-repeat: no-repeat;
+    background-size: 10px;
     /* В макете видно, что отступ сверху есть, но нет значений. Прикидывала на глаз, ориентируясь на текст имени*/
     margin-top: 16px;
     cursor: pointer;
@@ -26,5 +27,6 @@
     width: 18px;
     height: 18px;
     margin: 36px 0 0 10px;
+    background-size: 7.5px;
   }
 }

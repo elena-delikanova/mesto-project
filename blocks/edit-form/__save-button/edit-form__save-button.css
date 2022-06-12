@@ -12,6 +12,7 @@
     padding: 0;
     cursor: pointer;
     transition: opacity 0.3s linear;
+    border: none;
 }
 
 .edit-form__save-button:hover {
@@ -26,5 +27,8 @@
   .edit-form__save-button {
     width: 238px;
     height: 46px;
+    margin-top: 45px;
+    font-size: 14px;
+    line-height: 17px;
   }
 }

@@ -26,6 +26,7 @@
     right: 0;
     width: 20px;
     height: 20px;
+    background-size: contain;
     top: -36px;
   }
 }
