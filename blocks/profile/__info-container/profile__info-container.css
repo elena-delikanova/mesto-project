@@ -1,3 +1,12 @@
 .profile__info-container {
   display: flex;
 }
+
+
+@media screen and (max-width: 767px) {
+  /* Не хотелось задавать абсолютную максимальную ширину для мобильных устройств, т.к. у мобильных могут быть разные разрешения,
+  и 282px на экранах с 320px и 425px смотрятся очень по-разному*/
+  .profile__info-container {
+    max-width: calc(100vw - 38px);
+  }
+}
