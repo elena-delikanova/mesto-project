@@ -1,11 +1,11 @@
 .edit-form {
-    width: 430px;
-    box-sizing: border-box;
-    border-radius: 10px;
-    background-color: white;
-    display: flex;
-    flex-direction: column;
-    padding: 34px 36px 37px;
+  width: 430px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 34px 36px 37px;
 }
 
 @media screen and (max-width: 767px) {

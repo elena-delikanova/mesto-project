@@ -1,14 +1,14 @@
 .edit-form__header {
-    font-size: 24px;
-    line-height: 29px;
-    font-weight: 900;
-    font-style: normal;
-    color: black;
-    padding: 0 0 24px;
-    margin: 0;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
+  font-size: 24px;
+  line-height: 29px;
+  font-weight: 900;
+  font-style: normal;
+  color: black;
+  padding: 0 0 24px;
+  margin: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 @media screen and (max-width: 767px) {

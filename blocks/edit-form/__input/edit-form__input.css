@@ -1,13 +1,13 @@
 .edit-form__input {
-    padding: 13px 0;
-    margin: 17px 0 0;
-    font-size: 14px;
-    line-height: 17px;
-    font-weight: normal;
-    font-style: normal;
-    border: none;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
+  padding: 13px 0;
+  margin: 17px 0 0;
+  font-size: 14px;
+  line-height: 17px;
+  font-weight: normal;
+  font-style: normal;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
