@@ -28,70 +28,48 @@
     </section>
     <section class="photos">
       <ul class="photos__gallary">
-        <li class="photos__photo-card">
-          <figure class="photos__photo-item">
-            <img src="./images/karachaevsk.jpg" alt="Фотография древнего храма в Карачаевске" class="photos__photo">
-            <figcaption class="photos__photo-caption">Карачаевск</figcaption>
-          </figure>
-          <button class="photos__like-button" aria-label="Нравится" type="button"></button>
-        </li>
-        <li class="photos__photo-card">
-          <figure class="photos__photo-item">
-            <img src="./images/elbrus.jpg" alt="Фотография с горой Эльбрус на заднем плане" class="photos__photo">
-            <figcaption class="photos__photo-caption">Гора Эльбрус</figcaption>
-          </figure>
-          <button class="photos__like-button" aria-label="Нравится" type="button"></button>
-        </li>
-        <li class="photos__photo-card">
-          <figure class="photos__photo-item">
-            <img src="./images/dombai.jpg" alt="Фотография хребта Домбай" class="photos__photo">
-            <figcaption class="photos__photo-caption">Домбай</figcaption>
-          </figure>
-          <button class="photos__like-button" aria-label="Нравится" type="button"></button>
-        </li>
-        <li class="photos__photo-card">
-          <figure class="photos__photo-item">
-            <img src="./images/balkaria_tower.jpg"
-              alt="Фотография древней сторожевой башни Абаевых в с. Верхняя Балкария" class="photos__photo">
-            <figcaption class="photos__photo-caption">Башня Абаевых</figcaption>
-          </figure>
-          <button class="photos__like-button" aria-label="Нравится" type="button"></button>
-        </li>
-        <li class="photos__photo-card">
-          <figure class="photos__photo-item">
-            <img src="./images/balkaria_mountains.jpg"
-              alt="Фотография заснеженных горных вершин рядом с с. Верхняя Балкария" class="photos__photo">
-            <figcaption class="photos__photo-caption">c. Верхняя Балкария</figcaption>
-          </figure>
-          <button class="photos__like-button" aria-label="Нравится" type="button"></button>
-        </li>
-        <li class="photos__photo-card">
-          <figure class="photos__photo-item">
-            <img src="./images/cherek.jpg" alt="Фотография горной реки Черек" class="photos__photo">
-            <figcaption class="photos__photo-caption">Река Черек</figcaption>
-          </figure>
-          <button class="photos__like-button" aria-label="Нравится" type="button"></button>
-        </li>
       </ul>
     </section>
   </main>
   <footer class="footer">
     <p class="footer__copyright">&copy; 2020 Mesto Russia</p>
   </footer>
-  <section class="popup popup_opened">
-  <!--<section class="popup">-->
+  <section class="popup popup-edit-info">
     <div class="popup__container">
-      <form class="edit-form" name="edit-info">
-        <h2 class="edit-form__header">Редактировать профиль</h2>
-        <input type="text" class="edit-form__input" id="profile-name" aria-label="Имя" placeholder="Имя" name="name"
+      <form class="form edit-form" name="edit-info">
+        <h2 class="form__header">Редактировать профиль</h2>
+        <input type="text" class="form__input" id="profile-name" aria-label="Имя" placeholder="Имя" name="profile-name"
           required>
-        <input type="text" class="edit-form__input" id="profile-caption" aria-label="Подпись" placeholder="Подпись"
-          name="caption" required>
-        <button class="edit-form__save-button" type="submit">Сохранить</button>
+        <input type="text" class="form__input" id="profile-caption" aria-label="Подпись" placeholder="Подпись"
+          name="profile-caption" required>
+        <button class="form__save-button" type="submit">Сохранить</button>
       </form>
       <button class="popup__close-button" aria-label="Закрыть форму" type="button"></button>
     </div>
   </section>
+  <section class="popup popup-add-photo">
+    <div class="popup__container">
+      <form class="form add-photo-form" name="add-photo">
+        <h2 class="form__header">Новое место</h2>
+        <input type="text" class="form__input" id="photo-capture" aria-label="Название" placeholder="Название" name="photo-capture"
+          required>
+        <input type="text" class="form__input" id="photo-link" aria-label="Ссылка на картинку" placeholder="Ссылка на картинку"
+          name="photo-link" required>
+        <button class="form__save-button" type="submit">Создать</button>
+      </form>
+      <button class="popup__close-button" aria-label="Закрыть форму" type="button"></button>
+    </div>
+  </section>
+  <template id="photo-card">
+    <li class="photos__photo-card">
+      <figure class="photos__photo-item">
+        <img class="photos__photo">
+        <figcaption class="photos__photo-caption"></figcaption>
+      </figure>
+      <button class="photos__like-button" aria-label="Нравится" type="button"></button>
+    </li>
+  </template>
+  <script src="./scripts/index.js"></script>
 </body>
 
 </html>
