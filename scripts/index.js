@@ -29,17 +29,24 @@ function togglePopup(popup) {
 }
 
 const photosGallary = document.querySelector('.photos__gallary');
-function addNewPhoto(params) {
+function addNewPhotoToGallary(params) {
   const photoCardTemplate = document.querySelector('#photo-card').content;
   const photoCardElement = photoCardTemplate.querySelector('.photos__photo-card').cloneNode(true);
   photoCardElement.querySelector('.photos__photo').src = params.link;
   photoCardElement.querySelector('.photos__photo-caption').textContent = params.name;
   photoCardElement.querySelector('.photos__photo').alt = `Фотография ${params.name}`;
+  photoCardElement.querySelector('.photos__delete-button').addEventListener('click', (event) => {
+    const deletedPhoto = event.target.parentElement;
+    deletedPhoto.remove();
+  });
+  photoCardElement.querySelector('.photos__like-button').addEventListener('click', (event) => {
+    event.target.classList.toggle('photos__like-button_active');
+  });
   photosGallary.prepend(photoCardElement);
 }
 
 initialCards.forEach((cardInfo) => {
-  addNewPhoto({ name: cardInfo.name, link: cardInfo.link });
+  addNewPhotoToGallary({ name: cardInfo.name, link: cardInfo.link });
 });
 
 const addPhotoPopup = document.querySelector('.popup-add-photo');
@@ -48,7 +55,7 @@ addPhotoForm.addEventListener('submit', (event) => {
   event.preventDefault();
   const newPhotoCaptureInInput = event.target.querySelector('#photo-capture');
   const newPhotoLinkInInput = event.target.querySelector('#photo-link');
-  addNewPhoto({
+  addNewPhotoToGallary({
     name: newPhotoCaptureInInput.value,
     link: newPhotoLinkInInput.value,
   });
@@ -102,18 +109,5 @@ photoElements.forEach((photoElement) => {
     photoElementInPopup.alt = event.target.alt;
     photoCaptionElement.textContent = event.target.parentElement.querySelector('.photos__photo-caption').textContent;
     togglePopup(openPhotoPopup);
-  });
-});
-
-const deletePhotoButtons = document.querySelectorAll('.photos__delete-button').forEach((deleteButton) => {
-  deleteButton.addEventListener('click', (event) => {
-    const deletedPhoto = event.target.parentElement;
-    deletedPhoto.remove();
-  });
-});
-
-const likePhotoButtons = document.querySelectorAll('.photos__like-button').forEach((likeButton) => {
-  likeButton.addEventListener('click', (event) => {
-    event.target.classList.toggle('photos__like-button_active');
   });
 });
