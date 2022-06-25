@@ -1,40 +1,35 @@
 const initialCards = [
   {
-    name: 'Древний храм в Карачаевске',
-    link: './images/karachaevsk.jpg',
+    name: 'Гора Эльбрус',
+    link: './images/elbrus_balkaria.jpg',
   },
   {
-    name: 'Эльбрус',
-    link: './images/elbrus.jpg',
+    name: 'Полуостров Камчатка',
+    link: './images/kamchatka.jpg',
   },
   {
-    name: 'Хребет Домбай',
-    link: './images/dombai.jpg',
+    name: 'Стадион Крестовский (Газпром Арена) в Санкт-Петербурге',
+    link: './images/krestovsky.jpg',
   },
   {
-    name: 'Башня Абаевых, с. Верхняя Балкария',
-    link: './images/balkaria_tower.jpg',
+    name: 'Памятник лабораторной мыши, вяжущей нить ДНК Памятник лабораторной мыши, вяжущей нить ДНК Памятник лабораторной мыши, вяжущей нить ДНК Памятник лабораторной мыши, вяжущей нить ДНК',
+    link: './images/novosib_mice.jpg',
   },
   {
     name: 'Верхняя Балкария',
-    link: './images/balkaria_mountains.jpg',
+    link: './images/upper_balkaria.jpg',
   },
   {
-    name: 'Река Черек',
-    link: './images/cherek.jpg',
+    name: 'Петербуржский двор-колодец',
+    link: './images/well_courtyard.jpg',
   },
 ];
-
-function closePopup(popup) {
-  popup.classList.remove('popup_opened');
+function togglePopup(popup) {
+  popup.classList.toggle('popup_opened');
 }
 
-function openPopup(popup) {
-  popup.classList.add('popup_opened');
-}
-
+const photosGallary = document.querySelector('.photos__gallary');
 function addNewPhoto(params) {
-  const photosGallary = document.querySelector('.photos__gallary');
   const photoCardTemplate = document.querySelector('#photo-card').content;
   const photoCardElement = photoCardTemplate.querySelector('.photos__photo-card').cloneNode(true);
   photoCardElement.querySelector('.photos__photo').src = params.link;
@@ -48,50 +43,64 @@ initialCards.forEach((cardInfo) => {
 });
 
 const addPhotoPopup = document.querySelector('.popup-add-photo');
-const savePhotoButton = addPhotoPopup.querySelector('.form__save-button');
-const closeAddPhotoPopupButton = addPhotoPopup.querySelector('.popup__close-button');
-
-savePhotoButton.addEventListener('click', (event) => {
+const addPhotoForm = document.querySelector('.add-photo-form');
+addPhotoForm.addEventListener('submit', (event) => {
   event.preventDefault();
-  const newPhotoCaptureInInput = addPhotoPopup.querySelector('#photo-capture');
-  const newPhotoLinkInInput = addPhotoPopup.querySelector('#photo-link');
+  const newPhotoCaptureInInput = event.target.querySelector('#photo-capture');
+  const newPhotoLinkInInput = event.target.querySelector('#photo-link');
   addNewPhoto({
     name: newPhotoCaptureInInput.value,
     link: newPhotoLinkInInput.value,
   });
   newPhotoCaptureInInput.value = '';
   newPhotoLinkInInput.value = '';
-  closePopup(addPhotoPopup);
+  togglePopup(addPhotoPopup);
 });
 
 const closePopupButtons = document.querySelectorAll('.popup__close-button');
 closePopupButtons.forEach((button) => {
-  button.addEventListener('click', () => {
-    closePopup(button.parentElement.parentElement);
+  button.addEventListener('click', (event) => {
+    togglePopup(event.target.parentElement.parentElement);
   });
 });
 
 const addPhotoButton = document.querySelector('.profile__add-button');
 addPhotoButton.addEventListener('click', () => {
-  openPopup(addPhotoPopup);
+  togglePopup(addPhotoPopup);
 });
 
 const editInfoPopup = document.querySelector('.popup-edit-info');
+const editInfoForm = editInfoPopup.querySelector('.edit-form');
 const editInfoButton = document.querySelector('.profile__edit-button');
-const profileNameInInput = editInfoPopup.querySelector('#profile-name');
-const profileCaptionInInput = editInfoPopup.querySelector('#profile-caption');
+
+const profileNameInInput = editInfoForm.querySelector('#profile-name');
+const profileCaptionInInput = editInfoForm.querySelector('#profile-caption');
 const profileNameElement = document.querySelector('.profile__name');
 const profileCaptionElement = document.querySelector('.profile__caption');
+
 editInfoButton.addEventListener('click', () => {
   profileNameInInput.value = profileNameElement.textContent;
   profileCaptionInInput.value = profileCaptionElement.textContent;
-  openPopup(editInfoPopup);
+  togglePopup(editInfoPopup);
 });
 
 const saveProfileInfoButton = editInfoPopup.querySelector('.form__save-button');
-saveProfileInfoButton.addEventListener('click', (event) => {
+editInfoForm.addEventListener('submit', (event) => {
   event.preventDefault();
   profileNameElement.textContent = profileNameInInput.value;
   profileCaptionElement.textContent = profileCaptionInInput.value;
-  closePopup(editInfoPopup);
+  togglePopup(editInfoPopup);
+});
+
+const photoElements = photosGallary.querySelectorAll('.photos__photo');
+const openPhotoPopup = document.querySelector('.popup-photo');
+photoElements.forEach((photoElement) => {
+  photoElement.addEventListener('click', (event) => {
+    const photoElementInPopup = openPhotoPopup.querySelector('.popup-photo__photo');
+    const photoCaptionElement = openPhotoPopup.querySelector('.popup-photo__photo-caption');
+    photoElementInPopup.src = event.target.src;
+    photoElementInPopup.alt = event.target.alt;
+    photoCaptionElement.textContent = event.target.parentElement.querySelector('.photos__photo-caption').textContent;
+    togglePopup(openPhotoPopup);
+  });
 });

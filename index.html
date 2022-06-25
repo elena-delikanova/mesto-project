@@ -40,7 +40,7 @@
         <h2 class="form__header">Редактировать профиль</h2>
         <input type="text" class="form__input" id="profile-name" aria-label="Имя" placeholder="Имя" name="profile-name"
           required>
-        <input type="text" class="form__input" id="profile-caption" aria-label="Подпись" placeholder="Подпись"
+        <input type="text" class="form__input" id="profile-caption" aria-label="О себе" placeholder="О себе"
           name="profile-caption" required>
         <button class="form__save-button" type="submit">Сохранить</button>
       </form>
@@ -57,6 +57,15 @@
           name="photo-link" required>
         <button class="form__save-button" type="submit">Создать</button>
       </form>
+      <button class="popup__close-button" aria-label="Закрыть форму" type="button"></button>
+    </div>
+  </section>
+  <section class="popup popup-photo">
+    <div class="popup__container">
+      <figure class="popup-photo__photo-item">
+        <img class="popup-photo__photo">
+        <figcaption class="popup-photo__photo-caption"></figcaption>
+      </figure>
       <button class="popup__close-button" aria-label="Закрыть форму" type="button"></button>
     </div>
   </section>
