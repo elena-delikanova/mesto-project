@@ -104,3 +104,10 @@ photoElements.forEach((photoElement) => {
     togglePopup(openPhotoPopup);
   });
 });
+
+const deletePhotoButtons = document.querySelectorAll('.photos__delete-button').forEach((deleteButton) => {
+  deleteButton.addEventListener('click', (event) => {
+    const deletedPhoto = event.target.parentElement;
+    deletedPhoto.remove();
+  })
+});
