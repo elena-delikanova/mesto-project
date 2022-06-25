@@ -25,4 +25,4 @@
 
 ### Демо
 
-[Демо на GitHub Pages](https://elena-delikanova.github.io/mesto-project/index.html)
+[Демо на GitHub Pages](elena-delikanova.github.io/mesto-project/index.html)
