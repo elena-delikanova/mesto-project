@@ -109,5 +109,11 @@ const deletePhotoButtons = document.querySelectorAll('.photos__delete-button').f
   deleteButton.addEventListener('click', (event) => {
     const deletedPhoto = event.target.parentElement;
     deletedPhoto.remove();
-  })
+  });
+});
+
+const likePhotoButtons = document.querySelectorAll('.photos__like-button').forEach((likeButton) => {
+  likeButton.addEventListener('click', (event) => {
+    event.target.classList.toggle('photos__like-button_active');
+  });
 });
