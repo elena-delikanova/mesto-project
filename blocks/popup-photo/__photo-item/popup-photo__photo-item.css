@@ -1,3 +1,4 @@
 .popup-photo__photo-item {
   margin: 0;
+  display: table;
 }
