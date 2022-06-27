@@ -1,4 +1,6 @@
 .popup-photo__photo-item {
   margin: 0;
-  display: table;
+  display: flex;
+  flex-direction: column;
+  max-width: 75vw;
 }

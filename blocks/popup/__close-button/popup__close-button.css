@@ -7,8 +7,8 @@
   box-sizing: border-box;
   background-image: url(../../../images/close-button.svg);
   background-position: center;
+  background-color: unset;
   border: none;
-  background-color: black;
   cursor: pointer;
   transition: opacity 0.3s linear;
 }

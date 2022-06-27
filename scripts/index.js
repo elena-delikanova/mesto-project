@@ -26,92 +26,108 @@ const initialCards = [
 ];
 
 const photosGallary = document.querySelector('.photos__gallary');
-const addPhotoPopup = document.querySelector('.popup-add-photo');
-const addPhotoForm = document.querySelector('.add-photo-form');
-const closePopupButtons = document.querySelectorAll('.popup__close-button');
-const addPhotoButton = document.querySelector('.profile__add-button');
-const editInfoPopup = document.querySelector('.popup-edit-info');
-const editInfoButton = document.querySelector('.profile__edit-button');
+const photoAddingPopup = document.querySelector('.popup-add-photo');
+const photoAddingForm = document.querySelector('.add-photo-form');
+const popupClosingButtons = document.querySelectorAll('.popup__close-button');
+const photoAddingButton = document.querySelector('.profile__add-button');
+const infoEditingPopup = document.querySelector('.popup-edit-info');
+const infoEditingButton = document.querySelector('.profile__edit-button');
 const profileNameElement = document.querySelector('.profile__name');
 const profileCaptionElement = document.querySelector('.profile__caption');
-const openPhotoPopup = document.querySelector('.popup-photo');
-const editInfoForm = editInfoPopup.querySelector('.edit-form');
-const profileNameInInput = editInfoForm.querySelector('#profile-name');
-const profileCaptionInInput = editInfoForm.querySelector('#profile-caption');
-const saveProfileInfoButton = editInfoPopup.querySelector('.form__save-button');
-const photoElements = photosGallary.querySelectorAll('.photos__photo');
+const photoOpeningPopup = document.querySelector('.popup-photo');
+const photoCardTemplate = document.querySelector('#photo-card').content;
 
-function togglePopup(popup) {
-  popup.classList.toggle('popup_opened');
+const infoEditingForm = infoEditingPopup.querySelector('.edit-form');
+const profileNameInInput = infoEditingForm.querySelector('#profile-name');
+const profileCaptionInInput = infoEditingForm.querySelector('#profile-caption');
+const photoElements = photosGallary.querySelectorAll('.photos__photo');
+const photoElementInPopup = photoOpeningPopup.querySelector('.popup-photo__photo');
+const photoCaptionElement = photoOpeningPopup.querySelector('.popup-photo__photo-caption');
+const newPhotoCaptureInInput = photoAddingForm.querySelector('#photo-capture');
+const newPhotoLinkInInput = photoAddingForm.querySelector('#photo-link');
+
+function closePopup(popup) {
+  popup.classList.remove('popup_opened');
 }
 
-function addNewPhotoToGallary(params) {
-  const photoCardTemplate = document.querySelector('#photo-card').content;
+function openPopup(popup) {
+  popup.classList.add('popup_opened');
+}
+
+function createPhotoCard(params) {
   const photoCardElement = photoCardTemplate.querySelector('.photos__photo-card').cloneNode(true);
   const image = photoCardElement.querySelector('.photos__photo');
   const caption = photoCardElement.querySelector('.photos__photo-caption');
-  const deleteButton = photoCardElement.querySelector('.photos__delete-button');
-  const likeButton = photoCardElement.querySelector('.photos__like-button');
+  const photoDelitingButton = photoCardElement.querySelector('.photos__delete-button');
+  const photoLikeButton = photoCardElement.querySelector('.photos__like-button');
   caption.textContent = params.name;
   image.src = params.link;
   image.alt = `Фотография ${params.name}`;
-  image.addEventListener('click', (event) => {
-    const photoElementInPopup = openPhotoPopup.querySelector('.popup-photo__photo');
-    const photoCaptionElement = openPhotoPopup.querySelector('.popup-photo__photo-caption');
-    photoElementInPopup.src = event.target.src;
-    photoElementInPopup.alt = event.target.alt;
-    photoCaptionElement.textContent = event.target.parentElement.querySelector('.photos__photo-caption').textContent;
+  image.addEventListener('click', () => {
+    photoElementInPopup.src = params.link;
+    photoElementInPopup.alt = `Фотография ${params.name}`;
+    photoCaptionElement.textContent = params.name;
     /* При длинной подписи к фото ее растягивает больше, чем на ширину экрана. Если задать максимальный размер подписи в 75vw получается не очень красиво, если картинка узкая. Google дает в качестве варианта использование display: table для figure и display: table-caption для подписи, но это не помогло. Единственное, что мне пришло в голову -- высчитать вот так. Наверное, есть более изящный способ. Подскажите, пожалуйста, если вам не трудно. Спасибо!*/
-    photoCaptionElement.style.width = photoElementInPopup.clientWidth + 'px';
-    togglePopup(openPhotoPopup);
+    /* Сделала так, как вы предлагаете (через флекс). Но тогда узкие картинки растягивает на 75vw, см. картинку с мышью. Поэтому пока не убирала, просто закомментировала. */
+    // photoCaptionElement.style.width = photoElementInPopup.clientWidth + 'px';
+    openPopup(photoOpeningPopup);
   });
-  deleteButton.addEventListener('click', (event) => {
-    const deletedPhoto = event.target.parentElement;
-    deletedPhoto.remove();
+  photoDelitingButton.addEventListener('click', (event) => {
+    const photoToDelete = event.target.closest('.photos__photo-card');
+    photoToDelete.remove();
   });
-  likeButton.addEventListener('click', (event) => {
-    event.target.classList.toggle('photos__like-button_active');
+  photoLikeButton.addEventListener('click', () => {
+    /* А почему это лучше, чем event.target? Ведь с event.target мы явно показываем, что действие выполняется именно с самой кнопкой? */
+    photoLikeButton.classList.toggle('photos__like-button_active');
   });
-  photosGallary.prepend(photoCardElement);
+  return photoCardElement;
 }
 
+// А разве тут не получается, что функция делает два дела? Она сначала создает карточку, а потом помещает ее в галлерею?
+function renderPhotoCard(params) {
+  const card = createPhotoCard(params);
+  photosGallary.prepend(card);
+}
 
-addPhotoForm.addEventListener('submit', (event) => {
+photoAddingForm.addEventListener('submit', (event) => {
   event.preventDefault();
-  const newPhotoCaptureInInput = event.target.querySelector('#photo-capture');
-  const newPhotoLinkInInput = event.target.querySelector('#photo-link');
-  addNewPhotoToGallary({
+  renderPhotoCard({
     name: newPhotoCaptureInInput.value,
     link: newPhotoLinkInInput.value,
   });
-  newPhotoCaptureInInput.value = '';
-  newPhotoLinkInInput.value = '';
-  togglePopup(addPhotoPopup);
+  photoAddingForm.reset();
+  closePopup(photoAddingPopup);
 });
 
-closePopupButtons.forEach((button) => {
+/* Убрала фон, но так крестик теряется на светлых фото. У корзины аналогичная проблема */
+popupClosingButtons.forEach((button) => {
   button.addEventListener('click', (event) => {
-    togglePopup(event.target.parentElement.parentElement);
+    const popupToClose = event.target.closest('.popup');
+    const formInPopupToClose = popupToClose.querySelector('.form');
+    if (formInPopupToClose) {
+      formInPopupToClose.reset();
+    }
+    closePopup(popupToClose);
   });
 });
 
-addPhotoButton.addEventListener('click', () => {
-  togglePopup(addPhotoPopup);
+photoAddingButton.addEventListener('click', () => {
+  openPopup(photoAddingPopup);
 });
 
-editInfoButton.addEventListener('click', () => {
+infoEditingButton.addEventListener('click', () => {
   profileNameInInput.value = profileNameElement.textContent;
   profileCaptionInInput.value = profileCaptionElement.textContent;
-  togglePopup(editInfoPopup);
+  openPopup(infoEditingPopup);
 });
 
-editInfoForm.addEventListener('submit', (event) => {
+infoEditingForm.addEventListener('submit', (event) => {
   event.preventDefault();
   profileNameElement.textContent = profileNameInInput.value;
   profileCaptionElement.textContent = profileCaptionInInput.value;
-  togglePopup(editInfoPopup);
+  closePopup(infoEditingPopup);
 });
 
 initialCards.forEach((cardInfo) => {
-  addNewPhotoToGallary({ name: cardInfo.name, link: cardInfo.link });
+  renderPhotoCard({ name: cardInfo.name, link: cardInfo.link });
 });
