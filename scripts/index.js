@@ -67,9 +67,7 @@ function createPhotoCard(params) {
     photoElementInPopup.src = params.link;
     photoElementInPopup.alt = `Фотография ${params.name}`;
     photoCaptionElement.textContent = params.name;
-    /* При длинной подписи к фото ее растягивает больше, чем на ширину экрана. Если задать максимальный размер подписи в 75vw получается не очень красиво, если картинка узкая. Google дает в качестве варианта использование display: table для figure и display: table-caption для подписи, но это не помогло. Единственное, что мне пришло в голову -- высчитать вот так. Наверное, есть более изящный способ. Подскажите, пожалуйста, если вам не трудно. Спасибо!*/
-    /* Сделала так, как вы предлагаете (через флекс). Но тогда узкие картинки растягивает на 75vw, см. картинку с мышью. Поэтому пока не убирала, просто закомментировала. */
-    // photoCaptionElement.style.width = photoElementInPopup.clientWidth + 'px';
+    photoCaptionElement.style.width = photoElementInPopup.clientWidth + 'px';
     openPopup(photoOpeningPopup);
   });
   photoDelitingButton.addEventListener('click', (event) => {
@@ -83,35 +81,32 @@ function createPhotoCard(params) {
   return photoCardElement;
 }
 
-// А разве тут не получается, что функция делает два дела? Она сначала создает карточку, а потом помещает ее в галлерею?
+// Спасибо за подробный ответ! Сначала так и хотела сделать (создание отдельно, размещение отдельно), но смутило, что мы в текузем варианте кода дваждый делаем одно и то же
+// Сделала опять же через объект с параметрами, т.к. мне не очень нравятся цепочки аргументов
+// Сейчас, возможно, получается не очень удобно с т.зр. нейминга переменных, но ведь потом (надеюсь) у функций появятся описания
 function renderPhotoCard(params) {
-  const card = createPhotoCard(params);
-  photosGallary.prepend(card);
+  params.container.prepend(params.card);
 }
 
 photoAddingForm.addEventListener('submit', (event) => {
   event.preventDefault();
-  renderPhotoCard({
+  const card = createPhotoCard({
     name: newPhotoCaptureInInput.value,
     link: newPhotoLinkInInput.value,
   });
-  photoAddingForm.reset();
+  renderPhotoCard({ card: card, container: photosGallary });
   closePopup(photoAddingPopup);
 });
 
-/* Убрала фон, но так крестик теряется на светлых фото. У корзины аналогичная проблема */
 popupClosingButtons.forEach((button) => {
   button.addEventListener('click', (event) => {
     const popupToClose = event.target.closest('.popup');
-    const formInPopupToClose = popupToClose.querySelector('.form');
-    if (formInPopupToClose) {
-      formInPopupToClose.reset();
-    }
     closePopup(popupToClose);
   });
 });
 
 photoAddingButton.addEventListener('click', () => {
+  photoAddingForm.reset();
   openPopup(photoAddingPopup);
 });
 
@@ -129,5 +124,6 @@ infoEditingForm.addEventListener('submit', (event) => {
 });
 
 initialCards.forEach((cardInfo) => {
-  renderPhotoCard({ name: cardInfo.name, link: cardInfo.link });
+  const card = createPhotoCard({ name: cardInfo.name, link: cardInfo.link });
+  renderPhotoCard({ card: card, container: photosGallary });
 });
