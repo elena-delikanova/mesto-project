@@ -1,3 +1,12 @@
+const validationParams = {
+  formSelector: '.form',
+  fieldsetSelector: '.form__set',
+  inputSelector: '.form__input',
+  submitButtonSelector: '.form__save-button',
+  inactiveButtonClass: 'form__save-button_inactive',
+  inputErrorClass: 'form__input_type_error',
+  activeInputErrorClass: 'form__input-error_active',
+};
 const initialCards = [
   {
     name: 'Гора Эльбрус',
@@ -40,6 +49,7 @@ const profileNameInInput = editInfoForm.querySelector('#profile-name');
 const profileCaptionInInput = editInfoForm.querySelector('#profile-caption');
 const saveProfileInfoButton = editInfoPopup.querySelector('.form__save-button');
 const photoElements = photosGallary.querySelectorAll('.photos__photo');
+import enableValidation from "./validate.js";
 
 function togglePopup(popup) {
   popup.classList.toggle('popup_opened');
@@ -74,7 +84,6 @@ function addNewPhotoToGallary(params) {
   });
   photosGallary.prepend(photoCardElement);
 }
-
 
 addPhotoForm.addEventListener('submit', (event) => {
   event.preventDefault();
@@ -115,3 +124,5 @@ editInfoForm.addEventListener('submit', (event) => {
 initialCards.forEach((cardInfo) => {
   addNewPhotoToGallary({ name: cardInfo.name, link: cardInfo.link });
 });
+
+enableValidation(validationParams);

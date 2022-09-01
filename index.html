@@ -36,26 +36,45 @@
   </footer>
   <section class="popup popup-edit-info">
     <div class="popup__container">
-      <form class="form edit-form" name="edit-info">
+      <form class="form edit-form" name="edit-info" novalidate>
         <h2 class="form__header">Редактировать профиль</h2>
-        <input type="text" class="form__input" id="profile-name" aria-label="Имя" placeholder="Имя" name="profile-name"
-          required>
-        <input type="text" class="form__input" id="profile-caption" aria-label="О себе" placeholder="О себе"
-          name="profile-caption" required>
-        <button class="form__save-button" type="submit">Сохранить</button>
+        <fieldset class="form__set">
+          <label class="form__field">
+            <input type="text" class="form__input" id="profile-name" aria-label="Имя" placeholder="Имя"
+              name="profile-name" required minlength="2" maxlength="40" pattern="^[a-zA-Zа-яА-ЯёЁ\-\s]+$"
+              data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы">
+            <span class="form__input-error profile-name-error"></span>
+          </label>
+          <label class="form__field">
+            <input type="text" class="form__input" id="profile-caption" aria-label="О себе" placeholder="О себе"
+              name="profile-caption" required minlength="2" maxlength="200" pattern="^[a-zA-Zа-яА-ЯёЁ\-\s]+$"
+              data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы">
+            <span class="form__input-error profile-caption-error"></span>
+          </label>
+          <button class="form__save-button" type="submit">Сохранить</button>
+        </fieldset>
       </form>
       <button class="popup__close-button" aria-label="Закрыть форму" type="button"></button>
     </div>
   </section>
   <section class="popup popup-add-photo">
     <div class="popup__container">
-      <form class="form add-photo-form" name="add-photo">
+      <form class="form add-photo-form" name="add-photo" novalidate>
         <h2 class="form__header">Новое место</h2>
-        <input type="text" class="form__input" id="photo-capture" aria-label="Название" placeholder="Название" name="photo-capture"
-          required>
-        <input type="text" class="form__input" id="photo-link" aria-label="Ссылка на картинку" placeholder="Ссылка на картинку"
-          name="photo-link" required>
-        <button class="form__save-button" type="submit">Создать</button>
+        <fieldset class="form__set">
+          <label class="form__field">
+            <input type="text" class="form__input" id="photo-capture" aria-label="Название" placeholder="Название"
+              name="photo-capture" required minlength="2" maxlength="30" pattern="^[a-zA-Zа-яА-ЯёЁ\-\s]+$"
+              data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы">
+            <span class="form__input-error photo-capture-error"></span>
+          </label>
+          <label class="form__field">
+            <input type="url" class="form__input" id="photo-link" aria-label="Ссылка на картинку"
+              placeholder="Ссылка на картинку" name="photo-link" required>
+            <span class="form__input-error photo-link-error"></span>
+          </label>
+          <button class="form__save-button" type="submit">Создать</button>
+        </fieldset>
       </form>
       <button class="popup__close-button" aria-label="Закрыть форму" type="button"></button>
     </div>
@@ -79,7 +98,8 @@
       <button class="photos__like-button" aria-label="Нравится" type="button"></button>
     </li>
   </template>
-  <script src="./scripts/index.js"></script>
+  <script type="module" src="./components/index.js"></script>
+  <script type="module" src="./components/validate.js"></script>
 </body>
 
 </html>
