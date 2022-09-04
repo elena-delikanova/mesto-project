@@ -1,58 +1,62 @@
 import { setEventHandler, openPopup, closePopup } from './utils.js';
-import addNewPhotoToGallary from './card.js';
+import { renderPhotoCard, createPhotoCard} from './card.js';
 
-const addPhotoForm = document.querySelector('.add-photo-form');
-const addPhotoPopup = document.querySelector('.popup-add-photo');
-const addPhotoButton = document.querySelector('.profile__add-button');
-const closePopupButtons = document.querySelectorAll('.popup__close-button');
-const editInfoButton = document.querySelector('.profile__edit-button');
+const photoAddingForm = document.querySelector('.add-photo-form');
+const photoAddingPopup = document.querySelector('.popup-add-photo');
+const photoAddingButton = document.querySelector('.profile__add-button');
+const popupClosingButtons = document.querySelectorAll('.popup__close-button');
+const infoEditingButton = document.querySelector('.profile__edit-button');
 const profileNameElement = document.querySelector('.profile__name');
 const profileCaptionElement = document.querySelector('.profile__caption');
-const editInfoPopup = document.querySelector('.popup-edit-info');
-const editInfoForm = editInfoPopup.querySelector('.edit-form');
-const profileNameInInput = editInfoForm.querySelector('#profile-name');
-const profileCaptionInInput = editInfoForm.querySelector('#profile-caption');
+const infoEditingPopup = document.querySelector('.popup-edit-info');
+const infoEditingForm = infoEditingPopup.querySelector('.edit-form');
+const profileNameInInput = infoEditingForm.querySelector('#profile-name');
+const profileCaptionInInput = infoEditingForm.querySelector('#profile-caption');
+const photosGallary = document.querySelector('.photos__gallary');
+const newPhotoCaptureInInput = photoAddingForm.querySelector('#photo-capture');
+const newPhotoLinkInInput = photoAddingForm.querySelector('#photo-link');
 
-const submitEditInfoFormHandler = (event) => {
+const submitInfoEditingFormHandler = (event) => {
   event.preventDefault();
   profileNameElement.textContent = profileNameInInput.value;
   profileCaptionElement.textContent = profileCaptionInInput.value;
-  closePopup(editInfoPopup);
+  closePopup(infoEditingPopup);
 };
 
-const submitAddPhotoFormHandler = (event) => {
+const submitPhotoAddingFormHandler = (event) => {
   event.preventDefault();
-  const newPhotoCaptureInInput = event.target.querySelector('#photo-capture');
-  const newPhotoLinkInInput = event.target.querySelector('#photo-link');
-  addNewPhotoToGallary({
+  const card = createPhotoCard({
     name: newPhotoCaptureInInput.value,
     link: newPhotoLinkInInput.value,
   });
-  newPhotoCaptureInInput.value = '';
-  newPhotoLinkInInput.value = '';
-  closePopup(addPhotoPopup);
+  renderPhotoCard({ card: card, container: photosGallary });
+  closePopup(photoAddingPopup);
 };
 
-const editInfoButtonClickHandler = () => {
+const infoEditingButtonClickHandler = () => {
   profileNameInInput.value = profileNameElement.textContent;
   profileCaptionInInput.value = profileCaptionElement.textContent;
-  openPopup(editInfoPopup);
+  openPopup(infoEditingPopup);
 };
 
 const closePopupButtonHandler = (event) => {
-  closePopup(event.target.parentElement.parentElement);
+  const popupToClose = event.target.closest('.popup');
+  closePopup(popupToClose);
 };
 
-const addPhotoButtonClickHandler = () => {
-  openPopup(addPhotoPopup);
+const photoAddingButtonClickHandler = () => {
+  photoAddingForm.reset();
+  openPopup(photoAddingPopup);
 };
 
-export default function setPopups() {
-  setEventHandler({ objectToSet: addPhotoForm, handler: submitAddPhotoFormHandler, event: 'submit' });
-  setEventHandler({ objectToSet: editInfoForm, handler: submitEditInfoFormHandler, event: 'submit' });
-  closePopupButtons.forEach((button) => {
+function setPopups() {
+  setEventHandler({ objectToSet: photoAddingForm, handler: submitPhotoAddingFormHandler, event: 'submit' });
+  setEventHandler({ objectToSet: infoEditingForm, handler: submitInfoEditingFormHandler, event: 'submit' });
+  popupClosingButtons.forEach((button) => {
     setEventHandler({ objectToSet: button, handler: closePopupButtonHandler, event: 'click' });
   });
-  setEventHandler({ objectToSet: addPhotoButton, handler: addPhotoButtonClickHandler, event: 'click' });
-  setEventHandler({ objectToSet: editInfoButton, handler: editInfoButtonClickHandler, event: 'click' });
+  setEventHandler({ objectToSet: photoAddingButton, handler: photoAddingButtonClickHandler, event: 'click' });
+  setEventHandler({ objectToSet: infoEditingButton, handler: infoEditingButtonClickHandler, event: 'click' });
 }
+
+export {photosGallary, setPopups};

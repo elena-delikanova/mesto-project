@@ -11,20 +11,20 @@ const popupClickHandler = (evt) => {
   }
 };
 
-const openPopup = (popup) => {
+function openPopup(popup) {
   popup.classList.add('popup_opened');
   popup.addEventListener('keydown', popupEscapeHandler);
   popup.addEventListener('click', popupClickHandler);
 }
 
-const closePopup = (popup) => {
+function closePopup(popup) {
   popup.classList.remove('popup_opened');
   popup.removeEventListener('keydown', popupEscapeHandler);
   popup.removeEventListener('click', popupClickHandler);
 }
 
-const setEventHandler = (params) => {
+function setEventHandler(params) {
   params.objectToSet.addEventListener(params.event, params.handler);
 }
 
-export {openPopup, closePopup, setEventHandler};
+export { openPopup, closePopup, setEventHandler };
