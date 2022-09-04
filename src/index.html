@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mesto</title>
+</head>
+
+<body class="page">
+  <header class="header">
+    <img src="<%=require('./images/header-logo.svg')%>" alt="Логотип проекта Mesto Russia" class="header__logo">
+  </header>
+  <main class="content">
+    <section class="profile">
+      <div class="profile__avatar-and-info-container">
+        <img src="<%=require('./images/avatar.jpg')%>" alt="Аватар текущего пользователя" class="profile__avatar">
+        <div class="profile__info-container">
+          <div class="profile__info">
+            <h1 class="profile__name">Жак-Ив Кусто</h1>
+            <p class="profile__caption">Исследователь океана</p>
+          </div>
+          <button class="profile__edit-button" aria-label="Редактировать профиль" type="button"></button>
+        </div>
+      </div>
+      <button class="profile__add-button" aria-label="Добавить фото" type="button"></button>
+    </section>
+    <section class="photos">
+      <ul class="photos__gallary">
+      </ul>
+    </section>
+  </main>
+  <footer class="footer">
+    <p class="footer__copyright">&copy; 2020 Mesto Russia</p>
+  </footer>
+  <section class="popup popup-edit-info">
+    <div class="popup__container">
+      <form class="form edit-form" name="edit-info" novalidate>
+        <h2 class="form__header">Редактировать профиль</h2>
+        <fieldset class="form__set">
+          <label class="form__field">
+            <input type="text" class="form__input" id="profile-name" aria-label="Имя" placeholder="Имя"
+              name="profile-name" required minlength="2" maxlength="40" pattern="^[a-zA-Zа-яА-ЯёЁ\-\s]+$"
+              data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы">
+            <span class="form__input-error profile-name-error"></span>
+          </label>
+          <label class="form__field">
+            <input type="text" class="form__input" id="profile-caption" aria-label="О себе" placeholder="О себе"
+              name="profile-caption" required minlength="2" maxlength="200" pattern="^[a-zA-Zа-яА-ЯёЁ\-\s]+$"
+              data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы">
+            <span class="form__input-error profile-caption-error"></span>
+          </label>
+          <button class="form__save-button" type="submit">Сохранить</button>
+        </fieldset>
+      </form>
+      <button class="popup__close-button" aria-label="Закрыть форму" type="button"></button>
+    </div>
+  </section>
+  <section class="popup popup-add-photo">
+    <div class="popup__container">
+      <form class="form add-photo-form" name="add-photo" novalidate>
+        <h2 class="form__header">Новое место</h2>
+        <fieldset class="form__set">
+          <label class="form__field">
+            <input type="text" class="form__input" id="photo-capture" aria-label="Название" placeholder="Название"
+              name="photo-capture" required minlength="2" maxlength="30" pattern="^[a-zA-Zа-яА-ЯёЁ\-\s]+$"
+              data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы">
+            <span class="form__input-error photo-capture-error"></span>
+          </label>
+          <label class="form__field">
+            <input type="url" class="form__input" id="photo-link" aria-label="Ссылка на картинку"
+              placeholder="Ссылка на картинку" name="photo-link" required>
+            <span class="form__input-error photo-link-error"></span>
+          </label>
+          <button class="form__save-button" type="submit">Создать</button>
+        </fieldset>
+      </form>
+      <button class="popup__close-button" aria-label="Закрыть форму" type="button"></button>
+    </div>
+  </section>
+  <section class="popup popup_content_photo popup-photo">
+    <div class="popup__container">
+      <figure class="popup-photo__photo-item">
+        <img class="popup-photo__photo">
+        <figcaption class="popup-photo__photo-caption"></figcaption>
+      </figure>
+      <button class="popup__close-button" aria-label="Закрыть форму" type="button"></button>
+    </div>
+  </section>
+  <template id="photo-card">
+    <li class="photos__photo-card">
+      <figure class="photos__photo-item">
+        <img class="photos__photo">
+        <figcaption class="photos__photo-caption"></figcaption>
+      </figure>
+      <button class="photos__delete-button" aria-label="Удалить" type="button"></button>
+      <button class="photos__like-button" aria-label="Нравится" type="button"></button>
+    </li>
+  </template>
+</body>
+
+</html>

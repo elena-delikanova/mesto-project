@@ -11,17 +11,20 @@
 * Адаптивная верстка
 * `Grid Layout`
 * Медиазапросы
-* Формы
+* Формы с валидацией
 
 ### Технологии
 
 * `Flexbox`
 * `Grid Layout`
 * `Git`
+* `Webpack`
 
 ### Брифы и макет
 
 * [Макет](https://www.figma.com/file/2cn9N9jSkmxD84oJik7xL7/JavaScript.-Sprint-4?node-id=28212%3A326)
+* [Макет модальных окон с валидацией](https://www.figma.com/file/kRVLKwYG3d1HGLvh7JFWRT/JavaScript.-Sprint-6?node-id=0%3A1)
+
 
 ### Демо
 
