@@ -1,4 +1,4 @@
-import { openPopup, closePopup } from './utils.js';
+import { setEventHandler, openPopup, closePopup } from './utils.js';
 import addNewPhotoToGallary from './card.js';
 
 const addPhotoForm = document.querySelector('.add-photo-form');
@@ -13,7 +13,14 @@ const editInfoForm = editInfoPopup.querySelector('.edit-form');
 const profileNameInInput = editInfoForm.querySelector('#profile-name');
 const profileCaptionInInput = editInfoForm.querySelector('#profile-caption');
 
-addPhotoForm.addEventListener('submit', (event) => {
+const submitEditInfoFormHandler = (event) => {
+  event.preventDefault();
+  profileNameElement.textContent = profileNameInInput.value;
+  profileCaptionElement.textContent = profileCaptionInInput.value;
+  closePopup(editInfoPopup);
+};
+
+const submitAddPhotoFormHandler = (event) => {
   event.preventDefault();
   const newPhotoCaptureInInput = event.target.querySelector('#photo-capture');
   const newPhotoLinkInInput = event.target.querySelector('#photo-link');
@@ -24,27 +31,28 @@ addPhotoForm.addEventListener('submit', (event) => {
   newPhotoCaptureInInput.value = '';
   newPhotoLinkInInput.value = '';
   closePopup(addPhotoPopup);
-});
+};
 
-addPhotoButton.addEventListener('click', () => {
-  openPopup(addPhotoPopup);
-});
-
-closePopupButtons.forEach((button) => {
-  button.addEventListener('click', (event) => {
-    closePopup(event.target.parentElement.parentElement);
-  });
-});
-
-editInfoButton.addEventListener('click', () => {
+const editInfoButtonClickHandler = () => {
   profileNameInInput.value = profileNameElement.textContent;
   profileCaptionInInput.value = profileCaptionElement.textContent;
   openPopup(editInfoPopup);
-});
+};
 
-editInfoForm.addEventListener('submit', (event) => {
-  event.preventDefault();
-  profileNameElement.textContent = profileNameInInput.value;
-  profileCaptionElement.textContent = profileCaptionInInput.value;
-  closePopup(editInfoPopup);
-});
+const closePopupButtonHandler = (event) => {
+  closePopup(event.target.parentElement.parentElement);
+};
+
+const addPhotoButtonClickHandler = () => {
+  openPopup(addPhotoPopup);
+};
+
+export default function setPopups() {
+  setEventHandler({ objectToSet: addPhotoForm, handler: submitAddPhotoFormHandler, event: 'submit' });
+  setEventHandler({ objectToSet: editInfoForm, handler: submitEditInfoFormHandler, event: 'submit' });
+  closePopupButtons.forEach((button) => {
+    setEventHandler({ objectToSet: button, handler: closePopupButtonHandler, event: 'click' });
+  });
+  setEventHandler({ objectToSet: addPhotoButton, handler: addPhotoButtonClickHandler, event: 'click' });
+  setEventHandler({ objectToSet: editInfoButton, handler: editInfoButtonClickHandler, event: 'click' });
+}
