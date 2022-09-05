@@ -69,3 +69,5 @@ setEventHandler({ objectToSet: photoAddingButton, handler: photoAddingButtonClic
 setEventHandler({ objectToSet: infoEditingButton, handler: infoEditingButtonClickHandler, event: 'click' });
 
 enableValidation(validationParams);
+/* У меня, кажется, не сложилось цельной картины, что убирать в модули, а что оставлять в index.js. Почему, например, обработчики для форм мы не убираем в какой-нибудь модуль по работе с формами?
+И я, кажется, запуталась, когда мы функции объявляем как функциональное выражение, а когда -- как обычную функцию. Правильно ли я понимаю, что колбэки объявляются через функциональное выражение? А что еще? Если вам не трудно, подскажите, пожалуйста, где почитать про это */
