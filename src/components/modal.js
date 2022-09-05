@@ -1,6 +1,6 @@
 const popupEscapeHandler = (evt) => {
   if (evt.key === 'Escape') {
-    const openedPopup = evt.target.closest('.popup_opened');
+    const openedPopup = document.querySelector('.popup_opened');
     if (openedPopup) {
       closePopup(openedPopup);
     }
@@ -20,14 +20,14 @@ const closePopupButtonHandler = (event) => {
 
 function openPopup(popup) {
   popup.classList.add('popup_opened');
-  popup.addEventListener('keydown', popupEscapeHandler);
   popup.addEventListener('click', popupClickHandler);
+  document.addEventListener('keydown', popupEscapeHandler);
 }
 
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
-  popup.removeEventListener('keydown', popupEscapeHandler);
   popup.removeEventListener('click', popupClickHandler);
+  document.removeEventListener('keydown', popupEscapeHandler);
 }
 
 export { closePopupButtonHandler, openPopup, closePopup};
