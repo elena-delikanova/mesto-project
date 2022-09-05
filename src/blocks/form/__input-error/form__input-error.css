@@ -7,4 +7,12 @@
   opacity: 0;
   transition: opacity 0.3s ease;
   padding-top: 5px;
+  display: block;
+  min-height: 30px;
+}
+
+@media screen and (max-width: 767px) {
+  .form__input-error {
+    min-height: 45px;
+  }
 }
