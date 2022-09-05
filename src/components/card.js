@@ -1,4 +1,4 @@
-import { openPopup } from './utils.js';
+import { openPopup } from './modal.js';
 
 const photoOpeningPopup = document.querySelector('.popup-photo');
 const photoCardTemplate = document.querySelector('#photo-card').content;
@@ -15,9 +15,9 @@ function createPhotoCard(params) {
   image.src = params.link;
   image.alt = `Фотография ${params.name}`;
   image.addEventListener('click', (event) => {
-    photoElementInPopup.src = event.target.src;
-    photoElementInPopup.alt = event.target.alt;
-    photoCaptionElement.textContent = event.target.parentElement.querySelector('.photos__photo-caption').textContent;
+    photoElementInPopup.src = params.link;
+    photoElementInPopup.alt = `Фотография ${params.name}`;
+    photoCaptionElement.textContent = params.name;
     photoCaptionElement.style.width = photoElementInPopup.clientWidth + 'px';
     openPopup(photoOpeningPopup);
   });
@@ -31,8 +31,4 @@ function createPhotoCard(params) {
   return photoCardElement;
 }
 
-function renderPhotoCard(params) {
-  params.container.prepend(params.card);
-}
-
-export { createPhotoCard, renderPhotoCard };
+export { createPhotoCard };
