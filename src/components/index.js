@@ -1,7 +1,7 @@
 import './../pages/index.css';
 import { validationParams, initialCards } from './data.js';
 import { createPhotoCard } from './card.js';
-import enableValidation from './validate.js';
+import { enableValidation } from './validate.js';
 import { closePopupButtonHandler, openPopup, closePopup } from './modal.js';
 import { setEventHandler } from './utils.js';
 

@@ -1,3 +1,6 @@
+import { checkFromValidity } from './validate.js';
+import { validationParams } from './data.js';
+
 const popupEscapeHandler = (evt) => {
   if (evt.key === 'Escape') {
     const openedPopup = document.querySelector('.popup_opened');
@@ -22,6 +25,7 @@ function openPopup(popup) {
   popup.classList.add('popup_opened');
   popup.addEventListener('click', popupClickHandler);
   document.addEventListener('keydown', popupEscapeHandler);
+  checkFromValidity(popup, validationParams);
 }
 
 function closePopup(popup) {

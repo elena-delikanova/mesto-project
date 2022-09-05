@@ -1,4 +1,4 @@
-export default function enableValidation(validationParams) {
+function enableValidation(validationParams) {
   const formList = Array.from(document.querySelectorAll(validationParams.formSelector));
   formList.forEach((formElement) => {
     formElement.addEventListener('submit', function (evt) {
@@ -35,9 +35,6 @@ function toggleButtonState(params) {
 
 function hasInvalidInput(inputList) {
   return inputList.some((inputElement) => {
-    if (!inputElement.validity.valid) {
-      console.log(inputElement.validity);
-    }
     return !inputElement.validity.valid;
   });
 }
@@ -68,3 +65,16 @@ function hideInputError({ formElement, inputElement, validationParams }) {
   errorElement.classList.remove(validationParams.activeInputErrorClass);
   errorElement.textContent = '';
 }
+
+function checkFromValidity(formElement, validationParams) {
+  const inputList = Array.from(formElement.querySelectorAll(validationParams.inputSelector));
+  if (inputList.length > 0) {
+    const buttonElement = formElement.querySelector(validationParams.submitButtonSelector);
+    inputList.forEach((inputElement) => {
+      checkInputValidity({ formElement, inputElement, validationParams });
+    });
+    toggleButtonState({ inputList, buttonElement, validationParams });
+  }
+};
+
+export {enableValidation, checkFromValidity};
