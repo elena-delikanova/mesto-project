@@ -49,31 +49,22 @@ function checkInputValidity(params) {
     } else {
       params.inputElement.setCustomValidity('');
     }
-    showInputError({
-      formElement: params.formElement,
-      inputElement: params.inputElement,
-      errorMessage: params.inputElement.validationMessage,
-      validationParams: params.validationParams,
-    });
+    showInputError(params);
   } else {
-    hideInputError({
-      formElement: params.formElement,
-      inputElement: params.inputElement,
-      validationParams: params.validationParams,
-    });
+    hideInputError(params);
   }
 }
 
-function showInputError(params) {
-  const errorElement = params.formElement.querySelector(`.${params.inputElement.id}-error`);
-  params.inputElement.classList.add(params.validationParams.inputErrorClass);
-  errorElement.textContent = params.errorMessage;
-  errorElement.classList.add(params.validationParams.activeInputErrorClass);
+function showInputError({ formElement, inputElement, validationParams }) {
+  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
+  inputElement.classList.add(validationParams.inputErrorClass);
+  errorElement.textContent = inputElement.validationMessage;
+  errorElement.classList.add(validationParams.activeInputErrorClass);
 }
 
-function hideInputError(params) {
-  const errorElement = params.formElement.querySelector(`.${params.inputElement.id}-error`);
-  params.inputElement.classList.remove(params.validationParams.inputErrorClass);
-  errorElement.classList.remove(params.validationParams.activeInputErrorClass);
+function hideInputError({ formElement, inputElement, validationParams }) {
+  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
+  inputElement.classList.remove(validationParams.inputErrorClass);
+  errorElement.classList.remove(validationParams.activeInputErrorClass);
   errorElement.textContent = '';
 }
