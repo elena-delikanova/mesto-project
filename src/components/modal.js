@@ -1,6 +1,3 @@
-import { checkFromValidity } from './validate.js';
-import { validationParams } from './data.js';
-
 const popupEscapeHandler = (evt) => {
   if (evt.key === 'Escape') {
     const openedPopup = document.querySelector('.popup_opened');
@@ -25,7 +22,19 @@ function openPopup(popup) {
   popup.classList.add('popup_opened');
   popup.addEventListener('click', popupClickHandler);
   document.addEventListener('keydown', popupEscapeHandler);
-  checkFromValidity(popup, validationParams);
+}
+
+/* Вы написали, что проверку валидации нужно вынести в обработчики открытия конкретных модальных окон. Но ведь, кажется, что валидацию надо запускать для поапов с формами, то есть у нас два попапа с формами, и мне показалось, что пока нет оснований делать для них отдельные функции */
+function openPopupWithForm(popup) {
+  openPopup(popup);
+  const formInPopup = popup.closest('.form');
+  if (formInPopup) {
+    disableButtonInElement({
+      element: formInPopup,
+      buttonSelector: '.form__save-button',
+      inactiveButtonClass: 'form__save-button_inactive',
+    });
+  }
 }
 
 function closePopup(popup) {
@@ -34,4 +43,4 @@ function closePopup(popup) {
   document.removeEventListener('keydown', popupEscapeHandler);
 }
 
-export { closePopupButtonHandler, openPopup, closePopup};
+export { closePopupButtonHandler, openPopup, closePopup, openPopupWithForm };

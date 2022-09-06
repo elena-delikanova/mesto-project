@@ -2,7 +2,7 @@ import './../pages/index.css';
 import { validationParams, initialCards } from './data.js';
 import { createPhotoCard } from './card.js';
 import { enableValidation } from './validate.js';
-import { closePopupButtonHandler, openPopup, closePopup } from './modal.js';
+import { closePopupButtonHandler, openPopupWithForm, closePopup } from './modal.js';
 import { setEventHandler } from './utils.js';
 
 const photoAddingForm = document.querySelector('.add-photo-form');
@@ -19,8 +19,6 @@ const newPhotoLinkInInput = photoAddingForm.querySelector('#photo-link');
 const infoEditingForm = infoEditingPopup.querySelector('.edit-form');
 const profileNameInInput = infoEditingForm.querySelector('#profile-name');
 const profileCaptionInInput = infoEditingForm.querySelector('#profile-caption');
-
-
 
 const submitInfoEditingFormHandler = (event) => {
   event.preventDefault();
@@ -42,12 +40,12 @@ const submitPhotoAddingFormHandler = (event) => {
 const infoEditingButtonClickHandler = () => {
   profileNameInInput.value = profileNameElement.textContent;
   profileCaptionInInput.value = profileCaptionElement.textContent;
-  openPopup(infoEditingPopup);
+  openPopupWithForm(infoEditingPopup);
 };
 
 const photoAddingButtonClickHandler = () => {
   photoAddingForm.reset();
-  openPopup(photoAddingPopup);
+  openPopupWithForm(photoAddingPopup);
 };
 
 function renderPhotoCard(params) {
@@ -69,5 +67,4 @@ setEventHandler({ objectToSet: photoAddingButton, handler: photoAddingButtonClic
 setEventHandler({ objectToSet: infoEditingButton, handler: infoEditingButtonClickHandler, event: 'click' });
 
 enableValidation(validationParams);
-/* У меня, кажется, не сложилось цельной картины, что убирать в модули, а что оставлять в index.js. Почему, например, обработчики для форм мы не убираем в какой-нибудь модуль по работе с формами?
-И я, кажется, запуталась, когда мы функции объявляем как функциональное выражение, а когда -- как обычную функцию. Правильно ли я понимаю, что колбэки объявляются через функциональное выражение? А что еще? Если вам не трудно, подскажите, пожалуйста, где почитать про это */
+/* Спасибо за объяснения! */
