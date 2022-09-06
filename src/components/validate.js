@@ -1,5 +1,3 @@
-import { disableButton } from './utils.js';
-
 function enableValidation(validationParams) {
   const formList = Array.from(document.querySelectorAll(validationParams.formSelector));
   formList.forEach((formElement) => {
@@ -40,6 +38,11 @@ function hasInvalidInput(inputList) {
   });
 }
 
+function disableButton({ buttonElement, inactiveButtonClass }) {
+  buttonElement.classList.add(inactiveButtonClass);
+  buttonElement.disabled = true;
+}
+
 function checkInputValidity(params) {
   if (!params.inputElement.validity.valid) {
     if (params.inputElement.validity.patternMismatch) {
@@ -78,4 +81,9 @@ function checkFormValidity(formElement, validationParams) {
   }
 }
 
-export { enableValidation, checkFormValidity };
+function disableButtonInElement({ element, buttonSelector, inactiveButtonClass }) {
+  const buttonElement = element.querySelector(buttonSelector);
+  disableButton({ buttonElement, inactiveButtonClass });
+}
+
+export { enableValidation, checkFormValidity, disableButtonInElement };

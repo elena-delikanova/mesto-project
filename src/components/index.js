@@ -1,8 +1,8 @@
 import './../pages/index.css';
 import { validationParams, initialCards } from './data.js';
 import { createPhotoCard } from './card.js';
-import { enableValidation } from './validate.js';
-import { closePopupButtonHandler, openPopupWithForm, closePopup } from './modal.js';
+import { enableValidation, disableButtonInElement } from './validate.js';
+import { closePopupButtonHandler, openPopup, closePopup } from './modal.js';
 import { setEventHandler } from './utils.js';
 
 const photoAddingForm = document.querySelector('.add-photo-form');
@@ -40,12 +40,22 @@ const submitPhotoAddingFormHandler = (event) => {
 const infoEditingButtonClickHandler = () => {
   profileNameInInput.value = profileNameElement.textContent;
   profileCaptionInInput.value = profileCaptionElement.textContent;
-  openPopupWithForm(infoEditingPopup);
+  disableButtonInElement({
+    element: infoEditingForm,
+    buttonSelector: '.form__save-button',
+    inactiveButtonClass: 'form__save-button_inactive',
+  });
+  openPopup(infoEditingPopup);
 };
 
 const photoAddingButtonClickHandler = () => {
   photoAddingForm.reset();
-  openPopupWithForm(photoAddingPopup);
+  disableButtonInElement({
+    element: photoAddingForm,
+    buttonSelector: '.form__save-button',
+    inactiveButtonClass: 'form__save-button_inactive',
+  });
+  openPopup(photoAddingPopup);
 };
 
 function renderPhotoCard(params) {
@@ -67,4 +77,3 @@ setEventHandler({ objectToSet: photoAddingButton, handler: photoAddingButtonClic
 setEventHandler({ objectToSet: infoEditingButton, handler: infoEditingButtonClickHandler, event: 'click' });
 
 enableValidation(validationParams);
-/* Спасибо за объяснения! */
