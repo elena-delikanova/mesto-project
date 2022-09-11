@@ -39,24 +39,24 @@ const renderSubmitFormError = (err) => {
 
 const submitInfoEditingFormHandler = (event) => {
   event.preventDefault();
-  const submitButton = event.target.querySelector('.form__save-button');
+  const submitButton = event.submitter;
   const initialButtonText = submitButton.textContent;
   renderLoading({isLoading: true, button: submitButton});
   updateUserInfo({ name: profileNameInInput.value, about: profileCaptionInInput.value })
     .then((res) => {
       profileNameElement.textContent = res.name;
       profileCaptionElement.textContent = res.about;
+      closePopup(infoEditingPopup);
     })
     .catch(renderSubmitFormError)
     .finally(() => {
-      closePopup(infoEditingPopup);
       renderLoading({isLoading: false, button: submitButton, initialButtonText});
     });
 };
 
 const submitPhotoAddingFormHandler = (event) => {
   event.preventDefault();
-  const submitButton = event.target.querySelector('.form__save-button');
+  const submitButton = event.submitter;
   const initialButtonText = submitButton.textContent;
   renderLoading({isLoading: true, button: submitButton});
   postCard({
@@ -66,25 +66,25 @@ const submitPhotoAddingFormHandler = (event) => {
     .then((res) => {
       const card = createPhotoCard(res, userId);
       renderPhotoCard({ card, container: photosGallary });
+      closePopup(photoAddingPopup);
     })
     .catch(renderSubmitFormError)
     .finally(() => {
-      closePopup(photoAddingPopup);
       renderLoading({isLoading: false, button: submitButton, initialButtonText});
     });
 };
 
 const submitAvatarEditingFormHandler = (event) => {
   event.preventDefault();
-  const submitButton = event.target.querySelector('.form__save-button');
+  const submitButton = event.submitter;
   const initialButtonText = submitButton.textContent;
   updateUserAvatar(avatarLinkInInput.value)
     .then((res) => {
       userAvatar.src = res.avatar;
+      closePopup(avatarEditingPopup);
     })
     .catch(renderSubmitFormError)
     .finally(() => {
-      closePopup(avatarEditingPopup);
       renderLoading({isLoading: false, button: submitButton, initialButtonText});
     });
 };
@@ -95,11 +95,9 @@ const submitConfirmationPhotoDeletingFormHandler = () => {
     .then(() => {
       photoToDelete.remove();
       photoToDelete = undefined;
-    })
-    .catch(renderSubmitFormError)
-    .finally(() => {
       closePopup(confirmationPhotoDeletingPopup);
-    });
+    })
+    .catch(renderSubmitFormError);
 };
 
 const infoEditingButtonClickHandler = () => {
@@ -150,8 +148,8 @@ function renderLoading({isLoading, button, initialButtonText}) {
   }
 }
 
-getUserInfo()
-  .then((userInfo) => {
+Promise.all([getUserInfo(), getInitialCards()])
+  .then(([userInfo, photos]) => {
     profileNameElement.textContent = userInfo.name;
     profileCaptionElement.textContent = userInfo.about;
     userAvatar.src = userInfo.avatar;
@@ -159,6 +157,10 @@ getUserInfo()
       userAvatar.src = new URL('./../images/avatar.jpg', import.meta.url);
     }
     userId = userInfo._id;
+    photos.reverse().forEach((photo) => {
+      const card = createPhotoCard(photo, userId, photoDeletingButtonClickHandler);
+      renderPhotoCard({ card, container: photosGallary, });
+    });
   })
   .catch((err) => {
     console.log(err);
@@ -167,21 +169,9 @@ getUserInfo()
     loader.classList.add('loader-invisible');
   });
 
-getInitialCards()
-  .then((res) => {
-    res.forEach((photo) => {
-      const card = createPhotoCard(photo, userId, photoDeletingButtonClickHandler);
-      renderPhotoCard({ card, container: photosGallary, });
-    });
-  })
-  .catch((err) => {
-    console.log(err);
-  });
-
 popupClosingButtons.forEach((button) => {
   setEventHandler({ objectToSet: button, handler: closePopupButtonHandler, event: 'click' });
 });
-
 setEventHandler({ objectToSet: photoAddingForm, handler: submitPhotoAddingFormHandler, event: 'submit' });
 setEventHandler({ objectToSet: infoEditingForm, handler: submitInfoEditingFormHandler, event: 'submit' });
 setEventHandler({ objectToSet: avatarEditingForm, handler: submitAvatarEditingFormHandler, event: 'submit' });
