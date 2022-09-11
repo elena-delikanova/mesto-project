@@ -14,11 +14,14 @@
   <main class="content">
     <section class="profile">
       <div class="profile__avatar-and-info-container">
-        <img src="<%=require('./images/avatar.jpg')%>" alt="Аватар текущего пользователя" class="profile__avatar">
+        <div class="profile__avatar-container">
+          <img alt="Аватар текущего пользователя" class="profile__avatar">
+          <button class="profile__avatar-edit-button" aria-label="Редактировать аватар" type="button"></button>
+        </div>
         <div class="profile__info-container">
           <div class="profile__info">
-            <h1 class="profile__name">Жак-Ив Кусто</h1>
-            <p class="profile__caption">Исследователь океана</p>
+            <h1 class="profile__name"></h1>
+            <p class="profile__caption"></p>
           </div>
           <button class="profile__edit-button" aria-label="Редактировать профиль" type="button"></button>
         </div>
@@ -33,6 +36,12 @@
   <footer class="footer">
     <p class="footer__copyright">&copy; 2020 Mesto Russia</p>
   </footer>
+  <div class="loader">
+    <div class="loader__inner"></div>
+    <div class="loader__inner"></div>
+    <div class="loader__inner"></div>
+    <div class="loader__inner"></div>
+  </div>
   <div class="popup popup-edit-info">
     <div class="popup__container">
       <form class="form edit-form" name="edit-info" novalidate>
@@ -87,6 +96,41 @@
       <button class="popup__close-button" aria-label="Закрыть форму" type="button"></button>
     </div>
   </div>
+  <div class="popup popup-update-avatar">
+    <div class="popup__container">
+      <form class="form update-avatar-form" name="update-avatar" novalidate>
+        <h2 class="form__header">Обновить аватар</h2>
+        <fieldset class="form__set">
+          <label class="form__field">
+            <input type="url" class="form__input" id="update-avatar-link" aria-label="Ссылка на новый аватар"
+              placeholder="Ссылка на новый аватар" name="update-avatar-link" required>
+            <span class="form__input-error update-avatar-link-error"></span>
+          </label>
+          <button class="form__save-button" type="submit">Сохранить</button>
+        </fieldset>
+      </form>
+      <button class="popup__close-button" aria-label="Закрыть форму" type="button"></button>
+    </div>
+  </div>
+  <div class="popup popup-confirmation">
+    <div class="popup__container">
+      <form class="form confirmation-form" name="confirmation" novalidate>
+        <h2 class="form__header">Вы уверены?</h2>
+        <fieldset class="form__set">
+          <button class="form__save-button" type="submit">Да</button>
+        </fieldset>
+      </form>
+      <button class="popup__close-button" aria-label="Закрыть форму" type="button"></button>
+    </div>
+  </div>
+  <div class="popup popup-error">
+    <div class="popup__container">
+      <div class="error-container">
+        <h2 class="error-container__header">Непредвиденная ошибка</h2>
+      </div>
+      <button class="popup__close-button" aria-label="Закрыть форму" type="button"></button>
+    </div>
+  </div>
   <template id="photo-card">
     <li class="photos__photo-card">
       <figure class="photos__photo-item">
@@ -94,7 +138,10 @@
         <figcaption class="photos__photo-caption"></figcaption>
       </figure>
       <button class="photos__delete-button" aria-label="Удалить" type="button"></button>
-      <button class="photos__like-button" aria-label="Нравится" type="button"></button>
+      <div class="photos__like-container">
+        <button class="photos__like-button" aria-label="Нравится" type="button"></button>
+        <span class="photos__like-counter">0</span>
+      </div>
     </li>
   </template>
 </body>
