@@ -6,3 +6,7 @@ export const apiConfig = {
   },
 };
 
+export const photoOpeningPopup = document.querySelector('.popup-photo');
+export const photoCardTemplate = document.querySelector('#photo-card').content;
+export const photoElementInPopup = photoOpeningPopup.querySelector('.popup-photo__photo');
+export const photoCaptionElement = photoOpeningPopup.querySelector('.popup-photo__photo-caption');
