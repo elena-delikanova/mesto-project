@@ -18,7 +18,7 @@
   "name": "mesto-project",
   "description": "## Описание проекта",
   "version": "1.0.0",
-  "main": "./src/index.js",
+  "main": "./src/pages/index.js",
   "dependencies": {
     "core-js": "^3.25.0"
   },

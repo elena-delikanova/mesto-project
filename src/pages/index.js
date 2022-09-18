@@ -1,10 +1,12 @@
 import './../pages/index.css';
-import { validationParams } from './data.js';
-import { createPhotoCard } from './card.js';
-import { enableValidation, disableButtonInElement } from './validate.js';
-import { closePopupButtonHandler, openPopup, closePopup } from './modal.js';
-import { setEventHandler } from './utils.js';
-import { getInitialCards, getUserInfo, updateUserInfo, postCard, updateUserAvatar, deleteCard } from './api.js';
+import Api from '../components/Api.js';
+import { apiConfig } from '../utils/constants.js';
+import { validationParams } from '../components/data.js';
+import { createPhotoCard } from '../components/card.js';
+import { enableValidation, disableButtonInElement } from '../components/validate.js';
+import { closePopupButtonHandler, openPopup, closePopup } from '../components/modal.js';
+import { setEventHandler } from '../utils/utils.js';
+import { getInitialCards, getUserInfo, updateUserInfo, postCard, updateUserAvatar, deleteCard } from '../components/api.js';
 
 const photoAddingForm = document.querySelector('.add-photo-form');
 const photoAddingPopup = document.querySelector('.popup-add-photo');
@@ -32,6 +34,8 @@ const errorPopop = document.querySelector('.popup-error');
 let userId;
 let photoToDelete;
 
+const api = new Api(apiConfig)
+
 const renderSubmitFormError = (err) => {
   console.log(err);
   openPopup(errorPopop);
@@ -42,7 +46,7 @@ const submitInfoEditingFormHandler = (event) => {
   const submitButton = event.submitter;
   const initialButtonText = submitButton.textContent;
   renderLoading({isLoading: true, button: submitButton});
-  updateUserInfo({ name: profileNameInInput.value, about: profileCaptionInInput.value })
+  api.updateUserInfo({ name: profileNameInInput.value, about: profileCaptionInInput.value })
     .then((res) => {
       profileNameElement.textContent = res.name;
       profileCaptionElement.textContent = res.about;
@@ -59,7 +63,7 @@ const submitPhotoAddingFormHandler = (event) => {
   const submitButton = event.submitter;
   const initialButtonText = submitButton.textContent;
   renderLoading({isLoading: true, button: submitButton});
-  postCard({
+  api.postCard({
     name: newPhotoCaptureInInput.value,
     link: newPhotoLinkInInput.value,
   })
@@ -78,7 +82,7 @@ const submitAvatarEditingFormHandler = (event) => {
   event.preventDefault();
   const submitButton = event.submitter;
   const initialButtonText = submitButton.textContent;
-  updateUserAvatar(avatarLinkInInput.value)
+  api.updateUserAvatar(avatarLinkInInput.value)
     .then((res) => {
       userAvatar.src = res.avatar;
       closePopup(avatarEditingPopup);
@@ -91,7 +95,7 @@ const submitAvatarEditingFormHandler = (event) => {
 
 const submitConfirmationPhotoDeletingFormHandler = () => {
   const idOfDeletedPhoto = photoToDelete.querySelector('.photos__photo')._id;
-  deleteCard(idOfDeletedPhoto)
+  api.deleteCard(idOfDeletedPhoto)
     .then(() => {
       photoToDelete.remove();
       photoToDelete = undefined;
@@ -148,7 +152,7 @@ function renderLoading({isLoading, button, initialButtonText}) {
   }
 }
 
-Promise.all([getUserInfo(), getInitialCards()])
+Promise.all([api.getUserInfo(), api.getInitialCards()])
   .then(([userInfo, photos]) => {
     profileNameElement.textContent = userInfo.name;
     profileCaptionElement.textContent = userInfo.about;
