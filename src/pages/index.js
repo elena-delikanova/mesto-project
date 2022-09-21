@@ -1,6 +1,7 @@
 import './../pages/index.css';
 import Api from '../components/Api.js';
 import Card from '../components/Card.js';
+import Section from '../components/Section.js';
 
 import { apiConfig } from '../utils/constants.js';
 import { validationParams } from '../components/data.js';
@@ -8,7 +9,6 @@ import { validationParams } from '../components/data.js';
 import { enableValidation, disableButtonInElement } from '../components/validate.js';
 import { closePopupButtonHandler, openPopup, closePopup } from '../components/modal.js';
 import { setEventHandler } from '../utils/utils.js';
-import Section from '../components/Section.js';
 
 const photoAddingForm = document.querySelector('.add-photo-form');
 const photoAddingPopup = document.querySelector('.popup-add-photo');
@@ -72,9 +72,16 @@ const submitPhotoAddingFormHandler = (event) => {
       link: newPhotoLinkInInput.value,
     })
     .then((res) => {
-      const card = new Card(res, userId, photoDeletingButtonClickHandler, photoLikeButtonClickHandler);
-      const cardElement = card.generate();
-      renderPhotoCard({ cardElement, container: photosGallary });
+      const CardList = new Section({
+        data: [res],
+        renderer: (photo) => {
+          const card = new Card(photo, userId, photoDeletingButtonClickHandler, photoLikeButtonClickHandler);
+          const cardElement = card.generate();
+          CardList.setItem(cardElement);
+        },
+      }, photosGallary, 'prepend');
+      CardList.renderItems();
+
       closePopup(photoAddingPopup);
     })
     .catch(renderSubmitFormError)
@@ -197,7 +204,7 @@ Promise.all([api.getUserInfo(), api.getInitialCards()])
     const CardList = new Section({
       data: photos,
       renderer: (photo) => {
-        const card = new Card((photo, userId, photoDeletingButtonClickHandler, photoLikeButtonClickHandler));
+        const card = new Card(photo, userId, photoDeletingButtonClickHandler, photoLikeButtonClickHandler);
         const cardElement = card.generate();
         CardList.setItem(cardElement);
       },
