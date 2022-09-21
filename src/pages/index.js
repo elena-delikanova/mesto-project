@@ -8,6 +8,7 @@ import { validationParams } from '../components/data.js';
 import { enableValidation, disableButtonInElement } from '../components/validate.js';
 import { closePopupButtonHandler, openPopup, closePopup } from '../components/modal.js';
 import { setEventHandler } from '../utils/utils.js';
+import Section from '../components/Section.js';
 
 const photoAddingForm = document.querySelector('.add-photo-form');
 const photoAddingPopup = document.querySelector('.popup-add-photo');
@@ -183,6 +184,7 @@ function renderLoading({ isLoading, button, initialButtonText }) {
   }
 }
 
+
 Promise.all([api.getUserInfo(), api.getInitialCards()])
   .then(([userInfo, photos]) => {
     profileNameElement.textContent = userInfo.name;
@@ -192,11 +194,15 @@ Promise.all([api.getUserInfo(), api.getInitialCards()])
       userAvatar.src = new URL('./../images/avatar.jpg', import.meta.url);
     };
     userId = userInfo._id;
-    photos.reverse().forEach((photo) => {
-      const card = new Card(photo, userId, photoDeletingButtonClickHandler, photoLikeButtonClickHandler);
-      const cardElement = card.generate();
-      renderPhotoCard({ cardElement, container: photosGallary });
-    });
+    const CardList = new Section({
+      data: photos,
+      renderer: (photo) => {
+        const card = new Card((photo, userId, photoDeletingButtonClickHandler, photoLikeButtonClickHandler));
+        const cardElement = card.generate();
+        CardList.setItem(cardElement);
+      },
+    }, photosGallary, 'append');
+    CardList.renderItems();
   })
   .catch((err) => {
     console.log(err);
