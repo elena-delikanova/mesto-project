@@ -61,6 +61,15 @@ const submitInfoEditingFormHandler = (event) => {
     });
 };
 
+const CardList = new Section({
+  renderer: (photo) => {
+    const card = new Card(photo, userId, photoDeletingButtonClickHandler, photoLikeButtonClickHandler);
+    const cardElement = card.generate();
+    CardList.setItem(cardElement);
+  },
+}, photosGallary, 'prepend');
+
+
 const submitPhotoAddingFormHandler = (event) => {
   event.preventDefault();
   const submitButton = event.submitter;
@@ -72,16 +81,7 @@ const submitPhotoAddingFormHandler = (event) => {
       link: newPhotoLinkInInput.value,
     })
     .then((res) => {
-      const CardList = new Section({
-        data: [res],
-        renderer: (photo) => {
-          const card = new Card(photo, userId, photoDeletingButtonClickHandler, photoLikeButtonClickHandler);
-          const cardElement = card.generate();
-          CardList.setItem(cardElement);
-        },
-      }, photosGallary, 'prepend');
-      CardList.renderItems();
-
+      CardList.renderItems([res]);
       closePopup(photoAddingPopup);
     })
     .catch(renderSubmitFormError)
@@ -201,15 +201,7 @@ Promise.all([api.getUserInfo(), api.getInitialCards()])
       userAvatar.src = new URL('./../images/avatar.jpg', import.meta.url);
     };
     userId = userInfo._id;
-    const CardList = new Section({
-      data: photos,
-      renderer: (photo) => {
-        const card = new Card(photo, userId, photoDeletingButtonClickHandler, photoLikeButtonClickHandler);
-        const cardElement = card.generate();
-        CardList.setItem(cardElement);
-      },
-    }, photosGallary, 'append');
-    CardList.renderItems();
+    CardList.renderItems(photos.reverse());
   })
   .catch((err) => {
     console.log(err);
