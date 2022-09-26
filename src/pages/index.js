@@ -2,156 +2,161 @@ import './../pages/index.css';
 import Api from '../components/Api.js';
 import Card from '../components/Card.js';
 import Section from '../components/Section.js';
+import Popup from '../components/Popup.js';
+import PopupWithImage from '../components/PopupWithImage.js';
+import PopupWithForm from '../components/PopupWithForm.js';
+import PopupWithConfirmation from '../components/PopupWithConfirmation.js';
 
 import { apiConfig } from '../utils/constants.js';
 import { validationParams } from '../components/data.js';
 
-import { enableValidation, disableButtonInElement } from '../components/validate.js';
-import { closePopupButtonHandler, openPopup, closePopup } from '../components/modal.js';
+import { enableValidation } from '../components/validate.js';
+import { closePopupButtonHandler } from '../components/modal.js';
 import { setEventHandler } from '../utils/utils.js';
 
-const photoAddingForm = document.querySelector('.add-photo-form');
-const photoAddingPopup = document.querySelector('.popup-add-photo');
 const profileNameElement = document.querySelector('.profile__name');
 const profileCaptionElement = document.querySelector('.profile__caption');
 const photoAddingButton = document.querySelector('.profile__add-button');
 const popupClosingButtons = document.querySelectorAll('.popup__close-button');
 const infoEditingButton = document.querySelector('.profile__edit-button');
-const infoEditingPopup = document.querySelector('.popup-edit-info');
 const photosGallary = document.querySelector('.photos__gallary');
-const avatarEditingPopup = document.querySelector('.popup-update-avatar');
+
 const avatarEditingButton = document.querySelector('.profile__avatar-edit-button');
-const confirmationPhotoDeletingPopup = document.querySelector('.popup-confirmation');
-const confirmationPhotoDeletingForm = confirmationPhotoDeletingPopup.querySelector('.confirmation-form');
-const newPhotoCaptureInInput = photoAddingForm.querySelector('#photo-capture');
-const newPhotoLinkInInput = photoAddingForm.querySelector('#photo-link');
-const infoEditingForm = infoEditingPopup.querySelector('.edit-form');
-const profileNameInInput = infoEditingForm.querySelector('#profile-name');
-const profileCaptionInInput = infoEditingForm.querySelector('#profile-caption');
-const avatarEditingForm = avatarEditingPopup.querySelector('.update-avatar-form');
-const avatarLinkInInput = avatarEditingForm.querySelector('#update-avatar-link');
+
+const infoEditingPopupElement = document.querySelector('.popup-edit-info');
+const infoEditingFormElement = infoEditingPopupElement.querySelector('.edit-form');
+const profileNameInInput = infoEditingFormElement.querySelector('#profile-name');
+const profileCaptionInInput = infoEditingFormElement.querySelector('#profile-caption');
+
 const userAvatar = document.querySelector('.profile__avatar');
 const loader = document.querySelector('.loader');
-const errorPopop = document.querySelector('.popup-error');
 let userId;
 let photoToDelete;
 
 const api = new Api(apiConfig);
 
+const errorPopop = new Popup('.popup-error');
+
+const popupWithImage = new PopupWithImage('.popup-photo');
+
+const photoAddingPopup = new PopupWithForm({
+  popupSelector: '.popup-add-photo',
+  handleFormSubmit: (formValues) => {
+    const name = formValues['photo-capture'];
+    const link = formValues['photo-link'];
+    photoAddingPopup.renderLoading(true);
+    api
+      .postCard({
+        name,
+        link,
+      })
+      .then((res) => {
+        CardList.renderItems([res]);
+        photoAddingPopup.resetForm();
+        photoAddingPopup.close();
+      })
+      .catch(renderSubmitFormError)
+      .finally(() => {
+        photoAddingPopup.renderLoading(false);
+      });
+  },
+});
+
+const infoEditingPopup = new PopupWithForm({
+  popupSelector: '.popup-edit-info',
+  handleFormSubmit: (formValues) => {
+    const name = formValues['profile-name'];
+    const about = formValues['profile-caption'];
+    api
+      .updateUserInfo({ name, about })
+      .then((res) => {
+        profileNameElement.textContent = res.name;
+        profileCaptionElement.textContent = res.about;
+        infoEditingPopup.close();
+      })
+      .catch(renderSubmitFormError)
+      .finally(() => {
+        infoEditingPopup.renderLoading(false);
+      });
+  },
+});
+
+const avatarEditingPopup = new PopupWithForm({
+  popupSelector: '.popup-update-avatar',
+  handleFormSubmit: (formValues) => {
+    const avatarLink = formValues['update-avatar-link'];
+    api
+      .updateUserAvatar(avatarLink)
+      .then((res) => {
+        userAvatar.src = res.avatar;
+        avatarEditingPopup.close();
+      })
+      .catch(renderSubmitFormError)
+      .finally(() => {
+        avatarEditingPopup.renderLoading(false);
+      });
+  },
+});
+
+const confirmationPhotoDeletingPopup = new PopupWithConfirmation({
+  popupSelector: '.popup-confirmation',
+  handleFormSubmit: () => {
+    const idOfDeletedPhoto = photoToDelete.querySelector('.photos__photo')._id;
+    api
+      .deleteCard(idOfDeletedPhoto)
+      .then(() => {
+        photoToDelete.remove();
+        photoToDelete = undefined;
+        confirmationPhotoDeletingPopup.close();
+      })
+      .catch(renderSubmitFormError);
+  },
+});
+
+
 const renderSubmitFormError = (err) => {
   console.log(err);
-  openPopup(errorPopop);
+  errorPopop.open();
 };
 
-const submitInfoEditingFormHandler = (event) => {
-  event.preventDefault();
-  const submitButton = event.submitter;
-  const initialButtonText = submitButton.textContent;
-  renderLoading({ isLoading: true, button: submitButton });
-  api
-    .updateUserInfo({ name: profileNameInInput.value, about: profileCaptionInInput.value })
-    .then((res) => {
-      profileNameElement.textContent = res.name;
-      profileCaptionElement.textContent = res.about;
-      closePopup(infoEditingPopup);
-    })
-    .catch(renderSubmitFormError)
-    .finally(() => {
-      renderLoading({ isLoading: false, button: submitButton, initialButtonText });
-    });
-};
-
-const CardList = new Section({
-  renderer: (photo) => {
-    const card = new Card(photo, userId, photoDeletingButtonClickHandler, photoLikeButtonClickHandler);
-    const cardElement = card.generate();
-    CardList.setItem(cardElement);
+const CardList = new Section(
+  {
+    renderer: (photo) => {
+      const imageClickHandler = () => {
+        popupWithImage.open(photo);
+      };
+      const card = new Card(
+        photo,
+        userId,
+        photoDeletingButtonClickHandler,
+        photoLikeButtonClickHandler,
+        imageClickHandler,
+      );
+      const cardElement = card.generate();
+      CardList.setItem(cardElement);
+    },
   },
-}, photosGallary, 'prepend');
-
-
-const submitPhotoAddingFormHandler = (event) => {
-  event.preventDefault();
-  const submitButton = event.submitter;
-  const initialButtonText = submitButton.textContent;
-  renderLoading({ isLoading: true, button: submitButton });
-  api
-    .postCard({
-      name: newPhotoCaptureInInput.value,
-      link: newPhotoLinkInInput.value,
-    })
-    .then((res) => {
-      CardList.renderItems([res]);
-      closePopup(photoAddingPopup);
-    })
-    .catch(renderSubmitFormError)
-    .finally(() => {
-      renderLoading({ isLoading: false, button: submitButton, initialButtonText });
-    });
-};
-
-const submitAvatarEditingFormHandler = (event) => {
-  event.preventDefault();
-  const submitButton = event.submitter;
-  const initialButtonText = submitButton.textContent;
-  api
-    .updateUserAvatar(avatarLinkInInput.value)
-    .then((res) => {
-      userAvatar.src = res.avatar;
-      closePopup(avatarEditingPopup);
-    })
-    .catch(renderSubmitFormError)
-    .finally(() => {
-      renderLoading({ isLoading: false, button: submitButton, initialButtonText });
-    });
-};
-
-const submitConfirmationPhotoDeletingFormHandler = () => {
-  const idOfDeletedPhoto = photoToDelete.querySelector('.photos__photo')._id;
-  api
-    .deleteCard(idOfDeletedPhoto)
-    .then(() => {
-      photoToDelete.remove();
-      photoToDelete = undefined;
-      closePopup(confirmationPhotoDeletingPopup);
-    })
-    .catch(renderSubmitFormError);
-};
+  photosGallary,
+  'prepend',
+);
 
 const infoEditingButtonClickHandler = () => {
   profileNameInInput.value = profileNameElement.textContent;
   profileCaptionInInput.value = profileCaptionElement.textContent;
-  disableButtonInElement({
-    element: infoEditingForm,
-    buttonSelector: '.form__save-button',
-    inactiveButtonClass: 'form__save-button_inactive',
-  });
-  openPopup(infoEditingPopup);
+  infoEditingPopup.open();
 };
 
 const avatarEditingButtonClickHandler = () => {
-  avatarEditingForm.reset();
-  disableButtonInElement({
-    element: avatarEditingForm,
-    buttonSelector: '.form__save-button',
-    inactiveButtonClass: 'form__save-button_inactive',
-  });
-  openPopup(avatarEditingPopup);
+  avatarEditingPopup.open();
 };
 
 const photoAddingButtonClickHandler = () => {
-  photoAddingForm.reset();
-  disableButtonInElement({
-    element: photoAddingForm,
-    buttonSelector: '.form__save-button',
-    inactiveButtonClass: 'form__save-button_inactive',
-  });
-  openPopup(photoAddingPopup);
+  photoAddingPopup.open();
 };
 
 const photoDeletingButtonClickHandler = (event) => {
   photoToDelete = event.target.closest('.photos__photo-card');
-  openPopup(confirmationPhotoDeletingPopup);
+  confirmationPhotoDeletingPopup.open();
 };
 
 const photoLikeButtonClickHandler = function () {
@@ -179,19 +184,6 @@ const photoLikeButtonClickHandler = function () {
   }
 };
 
-function renderPhotoCard({ cardElement, container }) {
-  container.prepend(cardElement);
-}
-
-function renderLoading({ isLoading, button, initialButtonText }) {
-  if (isLoading) {
-    button.textContent = 'Сохранение...';
-  } else {
-    button.textContent = initialButtonText;
-  }
-}
-
-
 Promise.all([api.getUserInfo(), api.getInitialCards()])
   .then(([userInfo, photos]) => {
     profileNameElement.textContent = userInfo.name;
@@ -213,14 +205,7 @@ Promise.all([api.getUserInfo(), api.getInitialCards()])
 popupClosingButtons.forEach((button) => {
   setEventHandler({ objectToSet: button, handler: closePopupButtonHandler, event: 'click' });
 });
-setEventHandler({ objectToSet: photoAddingForm, handler: submitPhotoAddingFormHandler, event: 'submit' });
-setEventHandler({ objectToSet: infoEditingForm, handler: submitInfoEditingFormHandler, event: 'submit' });
-setEventHandler({ objectToSet: avatarEditingForm, handler: submitAvatarEditingFormHandler, event: 'submit' });
-setEventHandler({
-  objectToSet: confirmationPhotoDeletingForm,
-  handler: submitConfirmationPhotoDeletingFormHandler,
-  event: 'submit',
-});
+
 setEventHandler({ objectToSet: photoAddingButton, handler: photoAddingButtonClickHandler, event: 'click' });
 setEventHandler({ objectToSet: infoEditingButton, handler: infoEditingButtonClickHandler, event: 'click' });
 setEventHandler({ objectToSet: avatarEditingButton, handler: avatarEditingButtonClickHandler, event: 'click' });

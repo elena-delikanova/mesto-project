@@ -1,8 +1,7 @@
-import { photoCardTemplate, photoElementInPopup, photoCaptionElement, photoOpeningPopup } from '../utils/constants.js';
-import { openPopup } from './modal.js';
+import { photoCardTemplate } from '../utils/constants.js';
 
 export default class Card {
-  constructor({ name, link, likes, _id, owner }, userId, deletingButtonClickHandler, photoLikeButtonClickHandler) {
+  constructor({ name, link, likes, _id, owner }, userId, deletingButtonClickHandler, photoLikeButtonClickHandler, imageClickHandler) {
     this._name = name;
     this._link = link;
     this._likes = likes;
@@ -11,6 +10,7 @@ export default class Card {
     this._userId = userId;
     this._deletingButtonClickHandler = deletingButtonClickHandler;
     this._photoLikeButtonClickHandler = photoLikeButtonClickHandler;
+    this._imageClickHandler = imageClickHandler;
   }
 
   _getElement() {
@@ -19,13 +19,7 @@ export default class Card {
   }
 
   _setEventListeners() {
-    this._image.addEventListener('click', () => {
-      photoElementInPopup.src = this._link;
-      photoElementInPopup.alt = `Фотография ${this._name}`;
-      photoCaptionElement.textContent = this._name;
-      photoCaptionElement.style.width = photoElementInPopup.clientWidth + 'px';
-      openPopup(photoOpeningPopup);
-    });
+    this._image.addEventListener('click', this._imageClickHandler);
     this._photoDeletingButton.addEventListener('click', this._deletingButtonClickHandler);
     this._photoLikeButton.addEventListener('click', this._photoLikeButtonClickHandler.bind(this));
   }
