@@ -25,4 +25,9 @@ export const photosGallary = document.querySelector('.photos__gallary');
 
 export const avatarEditingButton = document.querySelector('.profile__avatar-edit-button');
 
+export const infoEditingPopupElement = document.querySelector('.popup-edit-info');
+export const infoEditingFormElement = infoEditingPopupElement.querySelector('.edit-form');
+export const profileNameInInput = infoEditingFormElement.querySelector('#profile-name');
+export const profileCaptionInInput = infoEditingFormElement.querySelector('#profile-caption');
+
 export const loader = document.querySelector('.loader');

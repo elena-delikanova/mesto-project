@@ -4,7 +4,7 @@ export default class FormValidator {
     fieldsetSelector,
     inputSelector,
     submitButtonSelector,
-    inactivaButtonClass,
+    inactiveButtonClass,
     inputErrorClass,
     activeInputErrorClass,
   }) {
@@ -12,7 +12,7 @@ export default class FormValidator {
     this._fieldsetSelector = fieldsetSelector;
     this._inputSelector = inputSelector;
     this._submitButtonSelector = submitButtonSelector;
-    this._inactivaButtonClass = inactivaButtonClass;
+    this._inactiveButtonClass = inactiveButtonClass;
     this._inputErrorClass = inputErrorClass;
     this._activeInputErrorClass = activeInputErrorClass;
     this._formList = Array.from(document.querySelectorAll(this._formSelector));
@@ -24,7 +24,7 @@ export default class FormValidator {
     this._toggleButtonState({ inputList, buttonElement });
     inputList.forEach((inputElement) => {
       inputElement.addEventListener('input', () => {
-        this._checkInputValidity({inputElement, formElement});
+        this._checkInputValidity({ inputElement, formElement });
         this._toggleButtonState({ inputList, buttonElement });
       });
     });
@@ -35,29 +35,25 @@ export default class FormValidator {
       this.disableSubmitButton(buttonElement);
     } else {
       this.enableSubmitButton(buttonElement);
-
     }
   }
 
   _hasInvalidInput(inputList) {
     return inputList.some((inputElement) => {
-      if (!inputElement.validity.valid) {
-        console.log(inputElement)
-      }
       return !inputElement.validity.valid;
     });
   }
 
-  _checkInputValidity({inputElement, formElement}) {
+  _checkInputValidity({ inputElement, formElement }) {
     if (!inputElement.validity.valid) {
       if (inputElement.validity.patternMismatch) {
         inputElement.setCustomValidity(inputElement.dataset.errorMessage);
       } else {
         inputElement.setCustomValidity('');
       }
-      this._showInputError({inputElement, formElement});
+      this._showInputError({ inputElement, formElement });
     } else {
-      this._hideInputError({inputElement, formElement});
+      this._hideInputError({ inputElement, formElement });
     }
   }
 
@@ -96,5 +92,4 @@ export default class FormValidator {
       });
     });
   }
-
 }

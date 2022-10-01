@@ -12,10 +12,10 @@ export default class PopupWithConfirmation extends PopupWithForm {
   }
 }*/
 
-import Popup from "./Popup.js";
+import Popup from './Popup.js';
 export default class PopupWithConfirmation extends Popup {
-  constructor({popupSelector, handleFormSubmit, closeButtonSelector}) {
-    super({popupSelector, closeButtonSelector});
+  constructor({ popupSelector, handleFormSubmit, closeButtonSelector }) {
+    super({ popupSelector, closeButtonSelector });
     this._form = this._popupElement.querySelector('.form');
     this._handleFormSubmit = handleFormSubmit;
   }
@@ -23,7 +23,7 @@ export default class PopupWithConfirmation extends Popup {
   _submitFormHandler = (evt) => {
     evt.preventDefault();
     this._handleFormSubmit();
-  }
+  };
 
   _setEventListeners() {
     super._setEventListeners();

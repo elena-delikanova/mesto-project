@@ -18,6 +18,8 @@ import {
   photosGallary,
   avatarEditingButton,
   loader,
+  profileNameInInput,
+  profileCaptionInInput,
 } from '../utils/constants.js';
 import { setEventHandler } from '../utils/utils.js';
 
@@ -26,13 +28,16 @@ let photoToDelete;
 const api = new Api(apiConfig);
 const formValidator = new FormValidator(validationParams);
 
-const errorPopop = new Popup({popupSelector: '.popup-error', closeButtonSelector: popupClosingButtonSelector});
+const errorPopop = new Popup({ popupSelector: '.popup-error', closeButtonSelector: popupClosingButtonSelector });
 const renderSubmitFormError = (err) => {
   console.log(err);
   errorPopop.open();
 };
 
-const popupWithImage = new PopupWithImage({popupSelector:'.popup-photo', closeButtonSelector: popupClosingButtonSelector});
+const popupWithImage = new PopupWithImage({
+  popupSelector: '.popup-photo',
+  closeButtonSelector: popupClosingButtonSelector,
+});
 
 const photoAddingPopup = new PopupWithForm({
   popupSelector: '.popup-add-photo',
@@ -142,6 +147,9 @@ const CardList = new Section(
 );
 
 const infoEditingButtonClickHandler = () => {
+  const { name, about } = userProfile.getCurrentInfo();
+  profileNameInInput.value = name;
+  profileCaptionInInput.value = about;
   infoEditingPopup.open();
 };
 
@@ -165,7 +173,6 @@ const photoLikeButtonClickHandler = function () {
       .then((res) => {
         this._photoLikeCounter.textContent = res.likes.length;
         this._photoLikeButton.classList.remove(this._activeLikeClass);
-        console.log(this._activeLikeClass);
       })
       .catch((err) => {
         console.log(err);

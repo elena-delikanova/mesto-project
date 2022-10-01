@@ -1,7 +1,13 @@
 import { photoCardTemplate } from '../utils/constants.js';
 
 export default class Card {
-  constructor({ name, link, likes, _id, owner }, userId, deletingButtonClickHandler, photoLikeButtonClickHandler, imageClickHandler) {
+  constructor(
+    { name, link, likes, _id, owner },
+    userId,
+    deletingButtonClickHandler,
+    photoLikeButtonClickHandler,
+    imageClickHandler,
+  ) {
     this._name = name;
     this._link = link;
     this._likes = likes;
