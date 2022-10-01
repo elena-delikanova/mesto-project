@@ -3,8 +3,8 @@
 /*
 import PopupWithForm from "./PopupWithForm.js";
 export default class PopupWithConfirmation extends PopupWithForm {
-  constructor({popupSelector, handleFormSubmit}) {
-    super({popupSelector, handleFormSubmit});
+  constructor({popupSelector, handleFormSubmit, closeButtonSelector}) {
+    super({popupSelector, handleFormSubmit, closeButtonSelector});
   }
 
   open() {
@@ -14,17 +14,24 @@ export default class PopupWithConfirmation extends PopupWithForm {
 
 import Popup from "./Popup.js";
 export default class PopupWithConfirmation extends Popup {
-  constructor({popupSelector, handleFormSubmit}) {
-    super(popupSelector);
+  constructor({popupSelector, handleFormSubmit, closeButtonSelector}) {
+    super({popupSelector, closeButtonSelector});
     this._form = this._popupElement.querySelector('.form');
     this._handleFormSubmit = handleFormSubmit;
-    this._setEventListeners();
+  }
+
+  _submitFormHandler = (evt) => {
+    evt.preventDefault();
+    this._handleFormSubmit();
   }
 
   _setEventListeners() {
-    this._form.addEventListener('submit', (evt) => {
-      evt.preventDefault();
-      this._handleFormSubmit();
-    });
+    super._setEventListeners();
+    this._form.addEventListener('submit', this._submitFormHandler);
+  }
+
+  _removeEventListeners() {
+    super._removeEventListeners();
+    this._form.removeEventListener('submit', this._submitFormHandler);
   }
 }

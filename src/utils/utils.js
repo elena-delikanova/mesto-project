@@ -1,5 +1,5 @@
-function setEventHandler(params) {
-  params.objectToSet.addEventListener(params.event, params.handler);
+function setEventHandler({objectToSet, event, handler}) {
+  objectToSet.addEventListener(event, handler);
 }
 
 export { setEventHandler };

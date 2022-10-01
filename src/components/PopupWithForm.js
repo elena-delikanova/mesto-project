@@ -1,23 +1,30 @@
 import Popup from './Popup.js';
-import { disableButtonInElement } from '../components/validate.js';
 
 export default class PopupWithForm extends Popup {
-  constructor({popupSelector, handleFormSubmit}) {
-    super(popupSelector);
+  constructor({popupSelector, closeButtonSelector, handleFormSubmit, disableSubmitButton}) {
+    super({popupSelector, closeButtonSelector});
     this._form = this._popupElement.querySelector('.form');
     this._submitButtonSelector = '.form__save-button';
     this._inactiveButtonClass = 'form__save-button_inactive';
     this._submitButton = this._form.querySelector(this._submitButtonSelector);
     this._submitButtonInitianText = this._submitButton.textContent;
     this._handleFormSubmit = handleFormSubmit;
-    this._setEventListeners();
+    this._disableSubmitButton = disableSubmitButton;
+  }
+
+  _submitFormHandler = (evt) => {
+    evt.preventDefault();
+    this._handleFormSubmit(this._getInputValues());
   }
 
   _setEventListeners() {
-    this._form.addEventListener('submit', (evt) => {
-      evt.preventDefault();
-      this._handleFormSubmit(this._getInputValues());
-    });
+    super._setEventListeners();
+    this._form.addEventListener('submit',this._submitFormHandler);
+  }
+
+  _removeEventListeners() {
+    super._removeEventListeners();
+    this._form.removeEventListener('submit', this._submitFormHandler);
   }
 
   _getInputValues() {
@@ -42,12 +49,7 @@ export default class PopupWithForm extends Popup {
   }
 
   open() {
-    console.log('Тук')
-    disableButtonInElement({
-      element: this._form,
-      buttonSelector: this._submitButtonSelector,
-      inactiveButtonClass: this._inactiveButtonClass,
-    });
+    this._disableSubmitButton(this._submitButton);
     super.open();
   }
 }

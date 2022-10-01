@@ -1,7 +1,21 @@
 export default class Popup {
-  constructor(popupSelector) {
+  constructor({popupSelector, closeButtonSelector}) {
     this._popupSelector = popupSelector;
     this._popupElement = document.querySelector(this._popupSelector);
+    this._closeButtonSelector = closeButtonSelector;
+    this._closeButton = this._popupElement.querySelector(this._closeButtonSelector);
+  }
+
+  _setEventListeners() {
+    this._closeButton.addEventListener('click', this._closeButtonClickHandler);
+    this._popupElement.addEventListener('click', this._clickHandler);
+    document.addEventListener('keydown', this._escapeHandler);
+  }
+
+  _removeEventListeners() {
+    this._closeButton.removeEventListener('click', this._closeButtonClickHandler);
+    this._popupElement.removeEventListener('click', this._clickHandler);
+    document.removeEventListener('keydown', this._escapeHandler);
   }
 
   _escapeHandler = (evt) => {
@@ -16,16 +30,17 @@ export default class Popup {
     }
   };
 
+  _closeButtonClickHandler = () => {
+    this.close();
+  }
+
   open() {
-    console.log('тЫК')
     this._popupElement.classList.add('popup_opened');
-    this._popupElement.addEventListener('click', this._clickHandler);
-    document.addEventListener('keydown', this._escapeHandler);
+    this._setEventListeners();
   }
 
   close() {
     this._popupElement.classList.remove('popup_opened');
-    this._popupElement.removeEventListener('click', this._clickHandler);
-    document.removeEventListener('keydown', this._escapeHandler);
+    this._removeEventListeners();
   }
 }
