@@ -6,6 +6,7 @@ import Popup from '../components/Popup.js';
 import PopupWithImage from '../components/PopupWithImage.js';
 import PopupWithForm from '../components/PopupWithForm.js';
 import PopupWithConfirmation from '../components/PopupWithConfirmation.js';
+import UserInfo from '../components/UserInfo.js';
 
 import { apiConfig } from '../utils/constants.js';
 import { validationParams } from '../components/data.js';
@@ -14,8 +15,6 @@ import { enableValidation } from '../components/validate.js';
 import { closePopupButtonHandler } from '../components/modal.js';
 import { setEventHandler } from '../utils/utils.js';
 
-const profileNameElement = document.querySelector('.profile__name');
-const profileCaptionElement = document.querySelector('.profile__caption');
 const photoAddingButton = document.querySelector('.profile__add-button');
 const popupClosingButtons = document.querySelectorAll('.popup__close-button');
 const infoEditingButton = document.querySelector('.profile__edit-button');
@@ -23,14 +22,7 @@ const photosGallary = document.querySelector('.photos__gallary');
 
 const avatarEditingButton = document.querySelector('.profile__avatar-edit-button');
 
-const infoEditingPopupElement = document.querySelector('.popup-edit-info');
-const infoEditingFormElement = infoEditingPopupElement.querySelector('.edit-form');
-const profileNameInInput = infoEditingFormElement.querySelector('#profile-name');
-const profileCaptionInInput = infoEditingFormElement.querySelector('#profile-caption');
-
-const userAvatar = document.querySelector('.profile__avatar');
 const loader = document.querySelector('.loader');
-let userId;
 let photoToDelete;
 
 const api = new Api(apiConfig);
@@ -62,6 +54,8 @@ const photoAddingPopup = new PopupWithForm({
   },
 });
 
+const userProfile = new UserInfo({selectorName: '.profile__name', selectorCaption: '.profile__caption', selectorAvatar: '.profile__avatar'})
+
 const infoEditingPopup = new PopupWithForm({
   popupSelector: '.popup-edit-info',
   handleFormSubmit: (formValues) => {
@@ -70,8 +64,7 @@ const infoEditingPopup = new PopupWithForm({
     api
       .updateUserInfo({ name, about })
       .then((res) => {
-        profileNameElement.textContent = res.name;
-        profileCaptionElement.textContent = res.about;
+        userProfile.setInfo(res)
         infoEditingPopup.close();
       })
       .catch(renderSubmitFormError)
@@ -88,7 +81,7 @@ const avatarEditingPopup = new PopupWithForm({
     api
       .updateUserAvatar(avatarLink)
       .then((res) => {
-        userAvatar.src = res.avatar;
+        userProfile.setAvatar(res.avatar)
         avatarEditingPopup.close();
       })
       .catch(renderSubmitFormError)
@@ -127,7 +120,7 @@ const CardList = new Section(
       };
       const card = new Card(
         photo,
-        userId,
+        userProfile.userId,
         photoDeletingButtonClickHandler,
         photoLikeButtonClickHandler,
         imageClickHandler,
@@ -141,8 +134,7 @@ const CardList = new Section(
 );
 
 const infoEditingButtonClickHandler = () => {
-  profileNameInInput.value = profileNameElement.textContent;
-  profileCaptionInInput.value = profileCaptionElement.textContent;
+1
   infoEditingPopup.open();
 };
 
@@ -186,13 +178,8 @@ const photoLikeButtonClickHandler = function () {
 
 Promise.all([api.getUserInfo(), api.getInitialCards()])
   .then(([userInfo, photos]) => {
-    profileNameElement.textContent = userInfo.name;
-    profileCaptionElement.textContent = userInfo.about;
-    userAvatar.src = userInfo.avatar;
-    userAvatar.onerror = () => {
-      userAvatar.src = new URL('./../images/avatar.jpg', import.meta.url);
-    };
-    userId = userInfo._id;
+    userProfile.setInfo(userInfo)
+    userProfile.setAvatar(userInfo.avatar)
     CardList.renderItems(photos.reverse());
   })
   .catch((err) => {
