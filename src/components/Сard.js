@@ -1,4 +1,4 @@
-import { photoCardTemplate } from '../utils/constants.js';
+import { photoCardTemplateSelector } from '../utils/constants.js';
 
 export default class Card {
   constructor(
@@ -11,23 +11,27 @@ export default class Card {
     this._name = name;
     this._link = link;
     this._likes = likes;
-    this._id = _id;
+    this.id = _id;
     this._ownerId = owner._id;
     this._userId = userId;
     this._deletingButtonClickHandler = deletingButtonClickHandler;
     this._photoLikeButtonClickHandler = photoLikeButtonClickHandler;
     this._imageClickHandler = imageClickHandler;
+    this._photoCardTemplate = document.querySelector(photoCardTemplateSelector).content;
+
   }
 
   _getElement() {
-    const photoCardElement = photoCardTemplate.querySelector('.photos__photo-card').cloneNode(true);
+    const photoCardElement = this._photoCardTemplate.querySelector('.photos__photo-card').cloneNode(true);
     return photoCardElement;
   }
 
   _setEventListeners() {
     this._image.addEventListener('click', this._imageClickHandler);
     this._photoDeletingButton.addEventListener('click', this._deletingButtonClickHandler);
-    this._photoLikeButton.addEventListener('click', this._photoLikeButtonClickHandler.bind(this));
+    this._photoLikeButton.addEventListener('click', () => {
+      this._photoLikeButtonClickHandler(this);
+    });
   }
 
   _setLikeButtonStatus() {
@@ -52,7 +56,7 @@ export default class Card {
     this._isCurrentUserCard = this._ownerId === this._userId;
 
     this._caption.textContent = this._name;
-    this._image._id = this._id;
+    this._image._id = this.id;
     this._image.src = this._link;
     this._image.alt = `Фотография ${this._name}`;
     this._photoLikeCounter.textContent = this._likes.length;
@@ -64,5 +68,10 @@ export default class Card {
     }
 
     return this._element;
+  }
+
+  updateLikes({action = 'add', likesLength}) {
+    this._photoLikeCounter.textContent = likesLength;
+    this._photoLikeButton.classList[action](this._activeLikeClass);
   }
 }

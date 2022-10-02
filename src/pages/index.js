@@ -1,6 +1,6 @@
 import './../pages/index.css';
 import Api from '../components/Api.js';
-import Card from '../components/Card.js';
+import Card from '../components/Сard.js';
 import Section from '../components/Section.js';
 import Popup from '../components/Popup.js';
 import PopupWithImage from '../components/PopupWithImage.js';
@@ -26,7 +26,8 @@ import { setEventHandler } from '../utils/utils.js';
 let photoToDelete;
 
 const api = new Api(apiConfig);
-const formValidator = new FormValidator(validationParams);
+
+const forms = document.querySelectorAll('.form');
 
 const errorPopop = new Popup({ popupSelector: '.popup-error', closeButtonSelector: popupClosingButtonSelector });
 const renderSubmitFormError = (err) => {
@@ -61,7 +62,6 @@ const photoAddingPopup = new PopupWithForm({
         photoAddingPopup.renderLoading(false);
       });
   },
-  disableSubmitButton: formValidator.disableSubmitButton,
 });
 
 const userProfile = new UserInfo({
@@ -87,7 +87,6 @@ const infoEditingPopup = new PopupWithForm({
         infoEditingPopup.renderLoading(false);
       });
   },
-  disableSubmitButton: formValidator.disableSubmitButton,
 });
 
 const avatarEditingPopup = new PopupWithForm({
@@ -106,7 +105,6 @@ const avatarEditingPopup = new PopupWithForm({
         avatarEditingPopup.renderLoading(false);
       });
   },
-  disableSubmitButton: formValidator.disableSubmitButton,
 });
 
 const confirmationPhotoDeletingPopup = new PopupWithConfirmation({
@@ -166,23 +164,21 @@ const photoDeletingButtonClickHandler = (event) => {
   confirmationPhotoDeletingPopup.open();
 };
 
-const photoLikeButtonClickHandler = function () {
-  if (this._photoLikeButton.classList.contains(this._activeLikeClass)) {
+const photoLikeButtonClickHandler = function (card) {
+  if (card._photoLikeButton.classList.contains(card._activeLikeClass)) {
     api
-      .deleteLike(this._id)
+      .deleteLike(card.id)
       .then((res) => {
-        this._photoLikeCounter.textContent = res.likes.length;
-        this._photoLikeButton.classList.remove(this._activeLikeClass);
+        card.updateLikes({action: 'remove', likesLength: res.likes.length })
       })
       .catch((err) => {
         console.log(err);
       });
   } else {
     api
-      .setLike(this._id)
+      .setLike(card.id)
       .then((res) => {
-        this._photoLikeCounter.textContent = res.likes.length;
-        this._photoLikeButton.classList.add(this._activeLikeClass);
+        card.updateLikes({ likesLength: res.likes.length });
       })
       .catch((err) => {
         console.log(err);
@@ -206,4 +202,8 @@ Promise.all([api.getUserInfo(), api.getInitialCards()])
 setEventHandler({ objectToSet: photoAddingButton, handler: photoAddingButtonClickHandler, event: 'click' });
 setEventHandler({ objectToSet: infoEditingButton, handler: infoEditingButtonClickHandler, event: 'click' });
 setEventHandler({ objectToSet: avatarEditingButton, handler: avatarEditingButtonClickHandler, event: 'click' });
-formValidator.enableValidation();
+
+forms.forEach((formElement) => {
+  const formValidator = new FormValidator(validationParams, formElement);
+  formValidator.enableValidation();
+})

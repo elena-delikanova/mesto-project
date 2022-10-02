@@ -1,21 +1,19 @@
 export default class FormValidator {
   constructor({
-    formSelector,
     fieldsetSelector,
     inputSelector,
     submitButtonSelector,
     inactiveButtonClass,
     inputErrorClass,
     activeInputErrorClass,
-  }) {
-    this._formSelector = formSelector;
+  }, form) {
     this._fieldsetSelector = fieldsetSelector;
     this._inputSelector = inputSelector;
     this._submitButtonSelector = submitButtonSelector;
     this._inactiveButtonClass = inactiveButtonClass;
     this._inputErrorClass = inputErrorClass;
     this._activeInputErrorClass = activeInputErrorClass;
-    this._formList = Array.from(document.querySelectorAll(this._formSelector));
+    this._form = form;
   }
 
   _setEventListeners(formElement) {
@@ -82,14 +80,13 @@ export default class FormValidator {
   }
 
   enableValidation() {
-    this._formList.forEach((formElement) => {
-      formElement.addEventListener('submit', function (evt) {
+      this._form.addEventListener('submit', function (evt) {
         evt.preventDefault();
       });
-      const fieldsetList = Array.from(formElement.querySelectorAll(this._fieldsetSelector));
+      const fieldsetList = Array.from(this._form.querySelectorAll(this._fieldsetSelector));
       fieldsetList.forEach((fieldset) => {
         this._setEventListeners(fieldset);
       });
-    });
+
   }
 }

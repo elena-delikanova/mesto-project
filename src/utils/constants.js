@@ -6,10 +6,9 @@ export const apiConfig = {
   },
 };
 
-export const photoCardTemplate = document.querySelector('#photo-card').content;
+export const photoCardTemplateSelector = '#photo-card';
 
 export const validationParams = {
-  formSelector: '.form',
   fieldsetSelector: '.form__set',
   inputSelector: '.form__input',
   submitButtonSelector: '.form__save-button',
