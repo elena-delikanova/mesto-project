@@ -18,8 +18,7 @@ import {
   photosGallary,
   avatarEditingButton,
   loader,
-  profileNameInInput,
-  profileCaptionInInput,
+  photoCardTemplateSelector,
 } from '../utils/constants.js';
 import { setEventHandler } from '../utils/utils.js';
 
@@ -28,6 +27,16 @@ let photoToDelete;
 const api = new Api(apiConfig);
 
 const forms = document.querySelectorAll('.form');
+const formValidators = {};
+
+const enableValidation = (config) => {
+  forms.forEach((formElement) => {
+    const validator = new FormValidator(config, formElement);
+    const formName = formElement.getAttribute('name');
+    formValidators[formName] = validator;
+    validator.enableValidation();
+  });
+};
 
 const errorPopop = new Popup({ popupSelector: '.popup-error', closeButtonSelector: popupClosingButtonSelector });
 const renderSubmitFormError = (err) => {
@@ -53,8 +62,7 @@ const photoAddingPopup = new PopupWithForm({
         link,
       })
       .then((res) => {
-        CardList.renderItems([res]);
-        photoAddingPopup.resetForm();
+        cardList.renderItems([res]);
         photoAddingPopup.close();
       })
       .catch(renderSubmitFormError)
@@ -76,10 +84,11 @@ const infoEditingPopup = new PopupWithForm({
   handleFormSubmit: (formValues) => {
     const name = formValues['profile-name'];
     const about = formValues['profile-caption'];
+    infoEditingPopup.renderLoading(true);
     api
       .updateUserInfo({ name, about })
       .then((res) => {
-        userProfile.setInfo(res);
+        userProfile.setUserInfo(res);
         infoEditingPopup.close();
       })
       .catch(renderSubmitFormError)
@@ -94,10 +103,11 @@ const avatarEditingPopup = new PopupWithForm({
   closeButtonSelector: popupClosingButtonSelector,
   handleFormSubmit: (formValues) => {
     const avatarLink = formValues['update-avatar-link'];
+    avatarEditingPopup.renderLoading(true);
     api
       .updateUserAvatar(avatarLink)
       .then((res) => {
-        userProfile.setAvatar(res.avatar);
+        userProfile.setUserInfo(res);
         avatarEditingPopup.close();
       })
       .catch(renderSubmitFormError)
@@ -123,7 +133,7 @@ const confirmationPhotoDeletingPopup = new PopupWithConfirmation({
   },
 });
 
-const CardList = new Section(
+const cardList = new Section(
   {
     renderer: (photo) => {
       const imageClickHandler = () => {
@@ -135,27 +145,30 @@ const CardList = new Section(
         photoDeletingButtonClickHandler,
         photoLikeButtonClickHandler,
         imageClickHandler,
+        photoCardTemplateSelector
       );
       const cardElement = card.generate();
-      CardList.setItem(cardElement);
+      cardList.setItem(cardElement);
     },
   },
   photosGallary,
-  'prepend',
 );
 
 const infoEditingButtonClickHandler = () => {
   const { name, about } = userProfile.getCurrentInfo();
-  profileNameInInput.value = name;
-  profileCaptionInInput.value = about;
+  infoEditingPopup.setInputValues({ 'profile-name': name, 'profile-caption': about });
+  formValidators['edit-info'].resetValidation();
+  formValidators['edit-info'].disableSubmitButton();
   infoEditingPopup.open();
 };
 
 const avatarEditingButtonClickHandler = () => {
+  formValidators['update-avatar'].disableSubmitButton();
   avatarEditingPopup.open();
 };
 
 const photoAddingButtonClickHandler = () => {
+  formValidators['add-photo'].disableSubmitButton();
   photoAddingPopup.open();
 };
 
@@ -165,11 +178,11 @@ const photoDeletingButtonClickHandler = (event) => {
 };
 
 const photoLikeButtonClickHandler = function (card) {
-  if (card._photoLikeButton.classList.contains(card._activeLikeClass)) {
+  if (card.photoLikeButton.classList.contains(card.activeLikeClass)) {
     api
       .deleteLike(card.id)
       .then((res) => {
-        card.updateLikes({action: 'remove', likesLength: res.likes.length })
+        card.updateLikes({ action: 'remove', likesLength: res.likes.length });
       })
       .catch((err) => {
         console.log(err);
@@ -188,9 +201,8 @@ const photoLikeButtonClickHandler = function (card) {
 
 Promise.all([api.getUserInfo(), api.getInitialCards()])
   .then(([userInfo, photos]) => {
-    userProfile.setInfo(userInfo);
-    userProfile.setAvatar(userInfo.avatar);
-    CardList.renderItems(photos.reverse());
+    userProfile.setUserInfo(userInfo);
+    cardList.renderItems(photos.reverse());
   })
   .catch((err) => {
     console.log(err);
@@ -203,7 +215,4 @@ setEventHandler({ objectToSet: photoAddingButton, handler: photoAddingButtonClic
 setEventHandler({ objectToSet: infoEditingButton, handler: infoEditingButtonClickHandler, event: 'click' });
 setEventHandler({ objectToSet: avatarEditingButton, handler: avatarEditingButtonClickHandler, event: 'click' });
 
-forms.forEach((formElement) => {
-  const formValidator = new FormValidator(validationParams, formElement);
-  formValidator.enableValidation();
-})
+enableValidation(validationParams);

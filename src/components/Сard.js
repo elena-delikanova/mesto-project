@@ -1,5 +1,3 @@
-import { photoCardTemplateSelector } from '../utils/constants.js';
-
 export default class Card {
   constructor(
     { name, link, likes, _id, owner },
@@ -7,17 +5,19 @@ export default class Card {
     deletingButtonClickHandler,
     photoLikeButtonClickHandler,
     imageClickHandler,
+    templateSelector,
   ) {
+    this.id = _id;
     this._name = name;
     this._link = link;
     this._likes = likes;
-    this.id = _id;
     this._ownerId = owner._id;
     this._userId = userId;
     this._deletingButtonClickHandler = deletingButtonClickHandler;
     this._photoLikeButtonClickHandler = photoLikeButtonClickHandler;
     this._imageClickHandler = imageClickHandler;
-    this._photoCardTemplate = document.querySelector(photoCardTemplateSelector).content;
+    this._templateSelector = templateSelector;
+    this._photoCardTemplate = document.querySelector(this._templateSelector).content;
 
   }
 
@@ -29,7 +29,7 @@ export default class Card {
   _setEventListeners() {
     this._image.addEventListener('click', this._imageClickHandler);
     this._photoDeletingButton.addEventListener('click', this._deletingButtonClickHandler);
-    this._photoLikeButton.addEventListener('click', () => {
+    this.photoLikeButton.addEventListener('click', () => {
       this._photoLikeButtonClickHandler(this);
     });
   }
@@ -40,7 +40,7 @@ export default class Card {
         return userInfo._id === this._userId;
       });
       if (isLikedByCurrentUser) {
-        this._photoLikeButton.classList.add(this._activeLikeClass);
+        this.photoLikeButton.classList.add(this.activeLikeClass);
       }
     }
   }
@@ -50,9 +50,8 @@ export default class Card {
     this._image = this._element.querySelector('.photos__photo');
     this._caption = this._element.querySelector('.photos__photo-caption');
     this._photoDeletingButton = this._element.querySelector('.photos__delete-button');
-    this._photoLikeButton = this._element.querySelector('.photos__like-button');
+
     this._photoLikeCounter = this._element.querySelector('.photos__like-counter');
-    this._activeLikeClass = 'photos__like-button_active';
     this._isCurrentUserCard = this._ownerId === this._userId;
 
     this._caption.textContent = this._name;
@@ -60,6 +59,9 @@ export default class Card {
     this._image.src = this._link;
     this._image.alt = `Фотография ${this._name}`;
     this._photoLikeCounter.textContent = this._likes.length;
+
+    this.photoLikeButton = this._element.querySelector('.photos__like-button');
+    this.activeLikeClass = 'photos__like-button_active';
 
     this._setEventListeners();
     this._setLikeButtonStatus();
@@ -72,6 +74,6 @@ export default class Card {
 
   updateLikes({action = 'add', likesLength}) {
     this._photoLikeCounter.textContent = likesLength;
-    this._photoLikeButton.classList[action](this._activeLikeClass);
+    this.photoLikeButton.classList[action](this.activeLikeClass);
   }
 }

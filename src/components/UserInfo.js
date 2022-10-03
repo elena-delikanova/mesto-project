@@ -5,14 +5,11 @@ export default class UserInfo {
     this._userAvatar = document.querySelector(selectorAvatar);
   }
 
-  setInfo({ name, about, _id }) {
+  setUserInfo({ name, about, avatar, _id }) {
+    this.userId = _id;
     this._profileNameElement.textContent = name;
     this._profileCaptionElement.textContent = about;
-    this.userId = _id;
-  }
-
-  setAvatar(avatarLink) {
-    this._userAvatar.src = avatarLink;
+    this._userAvatar.src = avatar;
     this._userAvatar.onerror = () => {
       this._userAvatar.src = new URL('./../images/avatar.jpg', import.meta.url);
     };
